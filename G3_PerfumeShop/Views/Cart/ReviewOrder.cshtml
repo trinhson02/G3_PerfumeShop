@@ -1,0 +1,173 @@
+﻿@model G3_PerfumeShop.Models.Order
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .payment-method {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+    }
+
+        .payment-method h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+    .payment-option {
+        margin-bottom: 20px;
+    }
+
+        .payment-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .payment-option label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+    .payment-instructions {
+        font-size: 14px;
+        color: #555;
+        margin-left: 25px;
+    }
+
+    .credit-card-icons img,
+    .paypal-info img {
+        width: 40px;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+    .paypal-info a {
+        color: #0070ba;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+        .paypal-info a:hover {
+            text-decoration: underline;
+        }
+
+    .place-order-btn {
+        background-color: #28a745;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .place-order-btn:hover {
+            background-color: #218838;
+        }
+</style>
+<div class="container mt-5">
+    <h2>Xem đơn hàng</h2>
+    <p>Vui lòng xem lại thông tin chi tiết đơn hàng của bạn bên dưới trước khi hoàn tất giao dịch.</p>
+
+    <h4>Thông tin đơn hàng</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên sản phẩm </th>
+                <th>Kích cỡ</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Tổng</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@item.ProductSizePricing.Product.Name</td>
+                    <td>@item.ProductSizePricing.Size</td>
+                    <td>@item.ProductSizePricing.Price</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.ProductSizePricing.Price * item.Quantity)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h4>Tổng: $@Model.OrderDetails.Sum(x => x.ProductSizePricing.Price * x.Quantity)</h4>
+
+
+    <!-- Form nhập thông tin giao hàng -->
+    <h4>Thông tin giao hàng</h4>
+    <form asp-action="CreatePaymentUrl" method="post">
+        <div class="form-group">
+            <label for="FirstName">Họ</label>
+            <input type="text" class="form-control" id="FirstName" name="FirstName" required />
+        </div>
+        <div class="form-group">
+            <label for="LastName">Tên</label>
+            <input type="text" class="form-control" id="LastName" name="LastName" required />
+        </div>
+        <div class="form-group">
+            <label for="Phone">Điện thoại</label>
+            <input type="text" class="form-control" id="Phone" name="Phone" required />
+        </div>
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="text" class="form-control" id="Email" name="Email[0]" required />
+        </div>
+        <div id="additional-email"></div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" id="addEmailBtn">+ Thêm Email</button>
+        </div>
+        <div class="form-group">
+            <label for="Address">Địa chỉ</label>
+            <input type="text" class="form-control" id="Address" name="Address[0]" required />
+        </div>
+        <div id="additional-addresses"></div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" id="addAddressBtn">+ Thêm Address</button>
+        </div>
+        <button type="submit" class="btn btn-success mt-4">Thanh Toán</button>
+    </form>
+
+    <a href="@Url.Action("Index", "Cart")" class="btn btn-secondary mt-3">Quay lại</a>
+</div>
+
+<script>
+    //Khi người dùng bấm nút "Thêm Email" (addEmailBtn), biến addressCount sẽ tăng lên,
+    //  tạo một trường email mới với nhãn "Email 2", "Email 3",... và thêm nó vào phần tử có id="additional-email" trong trang.
+    let addressCount = 0; //Khởi tạo một biến có tên addressCount và gán giá trị ban đầu là 0.
+                            // mỗi khi người dùng nhấn nút "Thêm Address" thì biến này sẽ tăng lên.
+
+    document.getElementById('addAddressBtn').addEventListener('click', function () {//Khi phần tử này bị nhấp chuột (sự kiện click),
+                                                                                    //hàm function () {...} sẽ được gọi để thực hiện các hành động tiếp theo.
+        addressCount++; // Tăng số lượng địa chỉ
+        let newAddress = `
+                <div class="form-group" id="address-${addressCount}"> 
+                    <label for="Address${addressCount}">Address ${addressCount + 1}</label>
+                    <input type="text" class="form-control" id="Address${addressCount}" name="Address[${addressCount}]" required />
+                </div>`;
+        document.getElementById('additional-addresses').insertAdjacentHTML('beforeend', newAddress);//Chèn nội dung HTML mới (newAddress) vào cuối phần tử additional-addresses.
+                                                                                                    // Điều này giúp hiển thị trường địa chỉ mới ngay sau các trường trước đó trong form.
+    });
+</script>
+
+<script>
+    //Khi người dùng bấm nút "Thêm Address" (addAddressBtn), biến emailCount sẽ tăng lên,
+    // tạo một trường address mới với nhãn "Address 2", "Address 3",... và thêm nó vào phần tử có id="additional-addresses" trong trang.
+    let emailCount = 0; // Đếm số mail
+
+    document.getElementById('addEmailBtn').addEventListener('click', function () {
+        emailCount++; // Tăng số lượng mail
+        let newEmail = `
+                    <div class="form-group" id="email-${emailCount}">
+                        <label for="Email${emailCount}">Email ${emailCount + 1}</label>
+                            <input type="text" class="form-control" id="Email${emailCount}" name="Email[${emailCount}]" required />
+                    </div>`;
+        document.getElementById('additional-email').insertAdjacentHTML('beforeend', newEmail);
+    });
+</script>
+

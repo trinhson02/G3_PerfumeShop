@@ -1,0 +1,38 @@
+﻿<meta charset="UTF-8"> <!-- Đặt bộ ký tự là UTF-8 để hỗ trợ nhiều ngôn ngữ -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Thiết lập chế độ xem cho responsive design -->
+<title>Login Form</title> <!-- Tiêu đề của trang -->
+<!-- Liên kết tới file CSS -->
+<link rel="stylesheet" href="~/css/login.css"> 
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet"> <!-- Liên kết tới Google Fonts -->
+
+<!-- Phần chứa form đăng nhập -->
+<div class="login-container">
+    <h2>ĐĂNG NHẬP</h2> <!-- Tiêu đề của form đăng nhập -->
+    <div class="login-content">
+
+        <form method="post" action="/Login/Index"> <!-- Form gửi thông tin đăng nhập -->
+            <div class="input-group"> <!-- Nhóm nhập tên đăng nhập -->
+                <i class="fa fa-user"></i> <!-- Biểu tượng cho trường tên đăng nhập -->
+                <input type="text" name="username" placeholder="Tên đăng nhập, Email hoặc Số điện thoại:" required> <!-- Trường nhập tên đăng nhập -->
+            </div>
+            <div class="input-group"> <!-- Nhóm nhập mật khẩu -->
+                <i class="fa fa-lock"></i> <!-- Biểu tượng cho trường mật khẩu -->
+                <input type="password" name="password" placeholder="Mật Khẩu:" required> <!-- Trường nhập mật khẩu -->
+            </div>
+            <div class="actions"> <!-- Các hành động của form -->
+                <label><input type="checkbox" name="rememberMe"> Nhớ Tài Khoản</label> <!-- Checkbox cho "Nhớ tài khoản" -->
+                <a asp-controller="ForgotPassword" asp-action="Index">Quên Mật Khẩu?</a> <!-- Liên kết tới trang quên mật khẩu -->
+            </div>
+
+            @if (ViewBag.ErrorMessage != null) 
+            {
+                <p style="color:red">@ViewBag.ErrorMessage</p> <!-- Hiển thị lỗi nếu có -->
+            }
+
+            <button type="submit" class="btn">ĐĂNG NHẬP</button> <!-- Nút để gửi form -->
+        </form>
+    </div>
+    <div class="register-link"> <!-- Liên kết tới trang đăng ký -->
+        <a href="/Register/Index">Đăng Ký</a>
+    </div>
+</div>

@@ -1,0 +1,125 @@
+﻿@model FeedbackListViewModel
+
+@{
+    ViewBag.Title = "Feedback List";
+}
+
+<h2>Feedback List</h2>
+
+<form method="get" asp-action="FeedbackList">
+    <fieldset>
+        <legend>Select Columns to Display</legend>
+        <label><input type="checkbox" name="columns" value="ID" @(Model.DynamicColumns.Contains("ID") ? "checked" : "") /> ID</label>
+        <label><input type="checkbox" name="columns" value="UserName" @(Model.DynamicColumns.Contains("UserName") ? "checked" : "") /> User Name</label>
+        <label><input type="checkbox" name="columns" value="ProductName" @(Model.DynamicColumns.Contains("ProductName") ? "checked" : "") /> Product Name</label>
+        <label><input type="checkbox" name="columns" value="Rating" @(Model.DynamicColumns.Contains("Rating") ? "checked" : "") /> Rating</label>
+        <label><input type="checkbox" name="columns" value="Status" @(Model.DynamicColumns.Contains("Status") ? "checked" : "") /> Status</label>
+    </fieldset>
+    <input type="text" name="searchTerm" value="@Model.SearchTerm" placeholder="Search by user, product, or content" />
+    <label for="rowCount">Số lượng hàng:</label>
+    <input type="number" name="rowCount" id="rowCount" placeholder="Nhập số lượng hàng">
+    <button type="submit">Hiển thị</button>
+    <select name="rating">
+        <option value="" selected>All Ratings</option>
+        @for (int i = 1; i <= 5; i++)
+        {
+            <option value="@i">@i Stars</option>
+        }
+    </select>
+
+    <select name="status">
+        <option value="" selected>All Statuses</option>
+        <option value="true">Visible</option>
+        <option value="false">Hidden</option>
+    </select>
+
+
+
+    <input type="submit" value="Search" />
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            @foreach (var column in Model.DynamicColumns)
+            {
+                <th>
+                    @Html.ActionLink(column, "FeedbackList", new { sortOrder = Model.SortOrder == $"{column.ToLower()}_asc" ? $"{column.ToLower()}_desc" : $"{column.ToLower()}_asc" })
+                </th>
+            }
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var feedback in Model.Feedbacks)
+        {
+            <tr>
+                @if (Model.DynamicColumns.Contains("ID"))
+                {
+                    <td>@feedback.Id</td>
+                }
+                @if (Model.DynamicColumns.Contains("UserName"))
+                {
+                    <td>@feedback.User.FirstName @feedback.User.LastName</td>
+                }
+                @if (Model.DynamicColumns.Contains("ProductName"))
+                {
+                    <td>
+                        @{
+                            var order = feedback.Order;
+                            var orderDetails = order?.OrderDetails.FirstOrDefault();
+                            var productSizePricing = orderDetails?.ProductSizePricing;
+                            var product = productSizePricing?.Product;
+
+                            if (product != null)
+                            {
+                                @product.Name
+                            }
+                            else
+                            {
+                                @: No Product
+                            }
+                        }
+                    </td>
+                }
+                @if (Model.DynamicColumns.Contains("Rating"))
+                {
+                    <td>@feedback.Rating</td>
+                }
+                @if (Model.DynamicColumns.Contains("Status"))
+                {
+                    <td>@(feedback.Status ? "Visible" : "Hidden")</td>
+                }
+                <td>
+                    <!-- Actions column -->
+                    <a href="@Url.Action("FeedbackDetail", new { id = feedback.Id })" class="btn btn-info">View</a>
+                    <form method="post" asp-action="ChangeFeedbackStatus" asp-controller="Feedback" style="display:inline;">
+                        <input type="hidden" name="id" value="@feedback.Id" />
+                        <input type="hidden" name="status" value="@(feedback.Status ? "false" : "true")" />
+                        <button type="submit" class="btn btn-warning">
+                            @(feedback.Status ? "Visible" : "Hidden")
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.TotalItems > Model.PageSize)
+{
+    var totalPages = (int)Math.Ceiling((double)Model.TotalItems / Model.PageSize);
+
+    <div>
+        @if (Model.Page > 1)
+        {
+            <a href="?page=@(Model.Page - 1)&rowCount=@Model.PageSize">Previous</a>
+        }
+        <span>Page @Model.Page of @totalPages</span>
+        @if (Model.Page < totalPages)
+        {
+            <a href="?page=@(Model.Page + 1)&rowCount=@Model.PageSize">Next</a>
+        }
+    </div>
+}
+

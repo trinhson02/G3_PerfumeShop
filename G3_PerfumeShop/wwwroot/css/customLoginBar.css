@@ -1,0 +1,50 @@
+﻿/* Căn chỉnh container dropdown */
+.user_dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Ẩn menu mặc định */
+.dropdown_menu {
+    display: none;
+    position: absolute;
+    top: 100%; /* Đặt menu ngay bên dưới tên người dùng */
+    left: 0;
+    background-color: white;
+    padding: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng đổ */
+    z-index: 999;
+    white-space: nowrap; /* Giữ nội dung trong một dòng */
+}
+
+/* Hiển thị menu khi click vào tên người dùng */
+.user_dropdown:hover .dropdown_menu {
+    display: block;
+}
+
+/* Style cho các mục trong menu */
+.dropdown_menu a {
+    color: #000;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+    /* Đổi màu khi hover vào các mục trong menu */
+    .dropdown_menu a:hover {
+        background-color: #f1f1f1;
+    }
+
+/* Đặt tên người dùng với định dạng thông thường */
+.user_name {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+    /* Đổi icon khi hover */
+    .user_name:hover {
+        color: #000;
+    }

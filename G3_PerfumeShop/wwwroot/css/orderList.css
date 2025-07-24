@@ -1,0 +1,52 @@
+﻿/* Đảm bảo các form nằm trên cùng một dòng và có khoảng cách đều */
+.row.align-items-center {
+    display: flex;
+    flex-wrap: wrap; /* Để đảm bảo rằng các phần tử sẽ xuống dòng nếu không đủ không gian */
+    gap: 15px; /* khoảng cách giữa các phần tử */
+}
+
+    /* Đảm bảo các form con có kích thước đồng nhất và căn chỉnh hợp lý */
+    .row.align-items-center > form {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Khoảng cách giữa các phần tử trong từng form */
+    }
+
+    /* Căn chỉnh các phần tử con trong từng cột */
+    .row.align-items-center .col-md-3,
+    .row.align-items-center .col-md-6 {
+        flex: 1; /* Chia đều không gian cho các cột */
+        min-width: 250px; /* Đảm bảo mỗi phần tử có độ rộng tối thiểu */
+    }
+
+/* Đảm bảo các ô lọc theo ngày chiếm toàn bộ chiều rộng trong flexbox */
+#dateFilterForm .form-control-sm,
+#dateFilterForm label {
+    font-size: 14px; /* Kích thước font đồng nhất */
+}
+
+.d-flex .form-control-sm {
+    width: 100%; /* Đảm bảo các ô ngày full width */
+}
+
+/* Đảm bảo các phần tử trong input group đều chiều cao */
+.input-group .form-control-sm,
+.input-group-text,
+.input-group .btn-outline-secondary {
+    height: 34px; /* Đồng bộ chiều cao các input và button */
+}
+
+/* Tạo khoảng cách giữa các nút radio và nhãn */
+.form-check-input {
+    margin-right: 5px; /* Khoảng cách giữa nút radio và nhãn */
+}
+
+.form-check {
+    display: inline-block; /* Hiển thị ngang các lựa chọn trạng thái */
+    margin-right: 15px;
+}
+
+/* Khoảng cách giữa phần lọc theo ngày và trạng thái */
+.row.align-items-center > form > .col-md-3 {
+    margin-right: 20px; /* Khoảng cách giữa các phần lọc */
+}

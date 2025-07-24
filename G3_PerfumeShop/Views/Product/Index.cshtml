@@ -1,0 +1,91 @@
+﻿    @model FilterProductViewModel
+
+    @{
+        ViewData["Title"] = "Index";
+    }
+
+    @section Styles {
+        <link href="~/css//products.css" rel="stylesheet" />
+    }
+
+<div class="x-product-container">
+    <!-- Phần lọc sản phẩm -->
+    <div class="filter-product-container">
+
+        <!-- Bộ lọc theo từ khóa tìm kiếm -->
+        <div class="filter-by-keyword">
+            <h3>Tìm kiếm</h3>
+            <input id="input-filter-keyword" type="text" name="keyword">
+        </div>
+
+        <!-- Bộ lọc theo thương hiệu -->
+        <div class="filter-by-brand">
+            <h3>Thương hiệu</h3>
+            <select class="filter-brand-dropdown filter-dropdown" name="brand" id="brands">
+                <!-- Các tùy chọn thương hiệu sẽ được thêm qua JavaScript -->
+            </select>
+        </div>
+
+        <!-- Bộ lọc theo giá -->
+        <div class="filter-by-price">
+            <h3>Giá</h3>
+            <p>Từ</p>
+            <input id="input-filter-from-price" type="number" min="0" step="50000" name="min-price">
+            <p>Đến</p>
+            <input id="input-filter-to-price" type="number" min="0" step="50000" name="max-price">
+        </div>
+
+        <!-- Bộ lọc theo dung tích -->
+        <div class="filter-by-volume">
+            <h3>Dung tích</h3>
+            <p>Từ</p>
+            <input id="input-filter-from-volume" type="number" min="0" step="5" name="min-volume">
+            <p>Đến</p>
+            <input id="input-filter-to-volume" type="number" min="0" step="5" name="max-volume">
+        </div>
+
+        <!-- Bộ lọc theo xuất xứ -->
+        <div class="filter-by-volume">
+            <h3>Xuất xứ</h3>
+            <select class="filter-origin-dropdown filter-dropdown" name="origin" id="origins">
+                <!-- Các tùy chọn xuất xứ sẽ được thêm qua JavaScript -->
+            </select>
+        </div>
+
+        <!-- Nút lọc để áp dụng bộ lọc đã chọn -->
+        <button id="btn-filter" class="btn btn-success" type="submit">Lọc</button>
+
+        <!-- Nút đặt lại bộ lọc về mặc định -->
+        <button id="btn-reset" class="btn btn-danger" type="reset">Đặt Lại</button>
+    </div>
+
+    <!-- Phần phân trang -->
+    <div id="pagination-container" class="pagination-container">
+        <nav aria-label="Page navigation">
+            <!-- Input để người dùng chọn số trang -->
+            <input id="input-paging" min="1" type="number" />
+
+            <!-- Nút để tìm kiếm sản phẩm theo số trang đã chọn -->
+            <button id="btn-paging" class="btn btn-success" type="submit">Tìm</button>
+
+            <!-- Hiển thị số lượng kết quả tìm được -->
+            <h6 id="txt-result-num"></h6>
+
+            <!-- Phần phân trang, các trang sẽ được thêm qua JavaScript -->
+            <ul id="pagination-ul" class="pagination">
+                <!-- Các trang sẽ được thêm vào đây -->
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Phần hiển thị danh sách sản phẩm -->
+    <div id="product-list-container" class="product-list-container">
+        <!-- Danh sách sản phẩm sẽ được thêm qua JavaScript -->
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript" src="~/ProductList/productList.js"></script>
+}
+

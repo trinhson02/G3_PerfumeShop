@@ -1,0 +1,36 @@
+﻿@model G3_PerfumeShop.Models.Blog
+
+@{
+    ViewData["Title"] = "Blog Detail";
+}
+<body>
+    <!--blog area start-->
+    <div class="blog_page_section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 col-md-12">
+                    <div class="blog_details">
+                        <div class="blog_thumbnail">
+                            <img src=@Model.ImageUrl alt="">
+                        </div>
+                        <div class="blog_content">
+                            <div class="blog_title">
+                                <h3>@Model.Title</h3>
+                            </div>
+                            <div class="blog_meta">
+                                <span class="post_date"><i class="fa-calendar fa"></i>@Model.CreatedAt</span>
+                                <span class="author"><i class="fa fa-user-circle"></i> Đăng bởi : admin</span>
+                            </div>
+                            <div class="blog_desc">
+                                <p>@Model.BlogContent</p>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--blog area end-->
+</body>
+</html>

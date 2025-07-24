@@ -1,0 +1,41 @@
+﻿@model ProductDetailViewModel
+<link rel="stylesheet" type="text/css" href="~/css/productdetailmanager.css" />
+
+<div>
+    <h2>@Model.Product.Name</h2>
+    <img src="@Model.Product.ImageUrl" alt="@Model.Product.Name" />
+    <p>@Model.Product.Description</p>
+    <p>Năm phát hành: @Model.Product.ReleaseYear.Year</p>
+    <p>Độ bền: @Model.Product.Longevity</p>
+    <p>Nồng độ: @Model.Product.Concentration</p>
+    <p>Điểm: @Model.Product.Point</p>
+    <p>Thương hiệu: @Model.Product.Brand.Name</p>
+    <p>Danh mục sản phẩm: @Model.Product.ProductCategory.Name</p>
+    <p>Giới tính: @Model.Product.Gender.Name</p>
+    <p>Nơi xuất xứ: @Model.Product.Origin.Name</p>
+    <h4>Giá theo kích cỡ</h4>
+    <select id="sizeSelect">
+        @foreach (var sizePricing in Model.SizePricings)
+        {
+            <option value="@sizePricing.Size" data-price="@sizePricing.Price">@sizePricing.Size</option>
+        }
+    </select>
+    <p>Price: <span id="price">@Model.SelectedPrice.ToString("C")</span></p>
+    <a href="/ProductManager/EditProductDetail/@Model.Product.Id" class="btn btn-primary">Sửa</a>
+    <form method="post" action="/ProductManager/ToggleVisibility/@Model.Product.Id" style="display:inline;">
+        <input type="hidden" name="isHidden" value="@(Model.Product.IsHidden ? "false" : "true")" />
+        <button type="submit" class="btn @(Model.Product.IsHidden ? "btn-success" : "btn-danger")">
+            @(Model.Product.IsHidden ? "Show" : "Hide")
+        </button>
+    </form>
+</div>
+<script>
+    const sizeSelect = document.getElementById('sizeSelect');
+    const priceDisplay = document.getElementById('price');
+
+    sizeSelect.addEventListener('change', function () {
+        const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+        const price = selectedOption.getAttribute('data-price');
+        priceDisplay.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+    });
+</script>

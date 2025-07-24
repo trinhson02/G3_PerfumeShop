@@ -1,0 +1,119 @@
+﻿@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<G3_PerfumeShop.Models.OrderDetail>
+
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .pagination-wrapper {
+        margin-top: 20px; /* Adds more space above the pagination */
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 10px; /* Adds space between pagination buttons */
+        padding: 10px 0;
+    }
+
+    .page-item {
+        margin: 0 5px; /* Adds space between individual page items */
+    }
+
+    .page-link {
+        padding: 8px 16px;
+        color: #007bff; /* Link color */
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+
+        .page-link:hover {
+            background-color: #f8f9fa; /* Light background on hover */
+            color: #0056b3;
+        }
+
+    .page-item.active .page-link {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+</style>
+<div class="container mt-5">
+    <h2>Thanh toán</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Hình ảnh</th> <!-- Thêm cột để hiển thị hình ảnh sản phẩm -->
+                    <th>Tên sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Tổng</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <!-- Hiển thị hình ảnh của sản phẩm -->
+                        <td>
+                            <img src="@item.ProductSizePricing.Product.ImageUrl" alt="@item.ProductSizePricing.Product.Name" style="width: 100px; height: auto;">
+                        </td>
+                        <td>@item.ProductSizePricing.Product.Name</td>
+                        <td>@item.ProductSizePricing.Price VNĐ</td>
+                        <td>
+                            <!-- Update form for quantity -->
+                            <form asp-action="UpdateCart" method="post">
+                                <input type="hidden" name="orderDetailId" value="@item.Id" />
+                                <input type="number" name="quantity" value="@item.Quantity" class="form-control" style="width: 60px; display:inline-block;" />
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            </form>
+                        </td>
+                        
+                        <td>@(item.ProductSizePricing.Price * item.Quantity) VNĐ</td>
+                        <td>
+                            <!-- Remove form -->
+                            <form asp-action="RemoveFromCart" method="post">
+                                <input type="hidden" name="orderDetailId" value="@item.Id" />
+                                <button type="submit" class="btn btn-danger">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h3>Total Price: @Model.Sum(x => x.ProductSizePricing.Price * x.Quantity) VNĐ</h3>
+
+        <!-- Nút chuyển tới trang review -->
+        <form asp-action="ReviewOrder" method="post">
+            <button type="submit" class="btn btn-success">Thanh toán</button>
+        </form>
+
+        <!-- Phân trang -->
+        <div class="pagination-wrapper d-flex justify-content-center mt-4">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+   {
+       DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+       DisplayLinkToLastPage = PagedListDisplayMode.Always,
+       DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+       DisplayLinkToNextPage = PagedListDisplayMode.Always,
+       MaximumPageNumbersToDisplay = 5,
+       DisplayItemSliceAndTotal = true,
+       DisplayPageCountAndCurrentLocation = true,
+       UlElementClasses = new[] { "pagination", "justify-content-center" },
+       LiElementClasses = new[] { "page-item" },
+       PageClasses = new[] { "page-link" }
+   })
+        </div>
+    }
+    else
+    {
+        <p>Giỏ hàng rỗng.</p>
+    }
+</div>

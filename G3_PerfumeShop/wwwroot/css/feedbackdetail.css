@@ -1,0 +1,53 @@
+﻿/* feedbackdetail.css */
+
+/* Đặt kiểu cho container chính */
+.container {
+    max-width: 800px; /* Giới hạn chiều rộng của container */
+    margin: 0 auto; /* Căn giữa container */
+}
+
+/* Cấu hình cho các thẻ caption */
+.caption {
+    color: #555; /* Màu chữ cho chú thích */
+    font-size: 14px; /* Kích thước chữ cho chú thích */
+    margin-top: 5px; /* Khoảng cách trên */
+    margin-bottom: 10px; /* Khoảng cách dưới */
+    text-align: center; /* Căn giữa chú thích */
+    display: block; /* Hiển thị như một khối */
+    overflow: hidden; /* Ngăn nội dung tràn ra ngoài */
+    white-space: nowrap; /* Ngăn dòng chữ xuống dòng */
+    text-overflow: ellipsis; /* Hiển thị dấu "..." nếu tràn */
+}
+
+/* Cấu hình cho các media-container */
+.media-container {
+    margin-bottom: 15px; /* Khoảng cách dưới cho mỗi media */
+    overflow: hidden; /* Giấu nội dung tràn */
+    position: relative; /* Để định vị các phần tử bên trong */
+    border: 1px solid #ddd; /* Viền cho container */
+    border-radius: 5px; /* Bo tròn các góc */
+    padding: 10px; /* Padding bên trong */
+}
+
+/* Cấu hình cho hình ảnh */
+.img-thumbnail {
+    max-width: 100%; /* Đảm bảo hình ảnh không tràn ra ngoài */
+    height: auto; /* Giữ tỷ lệ hình ảnh */
+}
+
+/* Cấu hình cho video */
+video {
+    max-width: 100%; /* Đảm bảo video không tràn ra ngoài */
+    height: auto; /* Giữ tỷ lệ video */
+}
+
+/* Đặt kiểu cho card */
+.card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho card */
+}
+
+/* Đặt kiểu cho các thẻ h4 trong card */
+.card-header h4 {
+    margin: 0; /* Bỏ khoảng cách mặc định */
+    font-size: 18px; /* Kích thước chữ cho tiêu đề */
+}

@@ -1,0 +1,91 @@
+﻿@model G3_PerfumeShop.Models.UserViewModel
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Thiết lập chế độ xem cho responsive design -->
+<title>@ViewData["Title"] - G3 Perfume</title> <!-- Tiêu đề của trang -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Liên kết tới Font Awesome cho biểu tượng -->
+<link rel="stylesheet" href="~/css/register.css" /> <!-- Liên kết tới file CSS cho trang đăng ký -->
+<!-- Form đăng ký tài khoản -->
+<form asp-controller="Register" asp-action="Index" method="post">
+    <div class="register-container">
+        <!-- Phần chứa form đăng ký -->
+        <h2>ĐĂNG KÝ TÀI KHOẢN</h2> <!-- Tiêu đề của form -->
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" }) <!-- Hiển thị thông báo lỗi nếu có -->
+        <div class="register-content">
+            <!-- Nội dung form đăng ký -->
+            <div class="input-group half">
+                <!-- Nhóm nhập họ -->
+                <i class="fa fa-user"></i> <!-- Biểu tượng cho trường họ -->
+                @Html.TextBoxFor(m => m.FirstName, new { @placeholder = "Họ", @class = "form-control input-with-icon" }) <!-- Trường nhập họ -->
+                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" }) <!-- Hiển thị thông báo lỗi cho trường họ -->
+            </div>
+            <div class="input-group half">
+                <!-- Nhóm nhập tên -->
+                <i class="fa fa-user"></i> <!-- Biểu tượng cho trường tên -->
+                @Html.TextBoxFor(m => m.LastName, new { @placeholder = "Tên", @class = "form-control input-with-icon" }) <!-- Trường nhập tên -->
+                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" }) <!-- Hiển thị thông báo lỗi cho trường tên -->
+            </div>
+            <div class="input-group">
+                <!-- Nhóm nhập email -->
+                <i class="fa fa-envelope"></i> <!-- Biểu tượng cho trường email -->
+                @Html.TextBoxFor(m => m.Email, new { @placeholder = "Email", @class = "form-control input-with-icon" }) <!-- Trường nhập email -->
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" }) <!-- Hiển thị thông báo lỗi cho trường email -->
+            </div>
+            <div class="input-group">
+                <!-- Nhóm nhập số điện thoại -->
+                <i class="fa fa-phone"></i> <!-- Biểu tượng cho trường điện thoại -->
+                @Html.TextBoxFor(m => m.Phone, new { @placeholder = "Điện Thoại", @class = "form-control input-with-icon" }) <!-- Trường nhập số điện thoại -->
+                @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" }) <!-- Hiển thị thông báo lỗi cho trường điện thoại -->
+            </div>
+            <div class="input-group">
+                <!-- Nhóm nhập địa chỉ -->
+                <i class="fa fa-home"></i> <!-- Biểu tượng cho trường địa chỉ -->
+                @Html.TextBoxFor(m => m.Address, new { @placeholder = "Địa Chỉ", @class = "form-control input-with-icon" }) <!-- Trường nhập địa chỉ -->
+                @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" }) <!-- Hiển thị thông báo lỗi cho trường địa chỉ -->
+            </div>
+            <div class="input-group">
+                <!-- Nhóm nhập ngày sinh -->
+                <i class="fa fa-calendar"></i> <!-- Biểu tượng cho trường ngày sinh -->
+                @Html.TextBoxFor(m => m.Birthdate, new { @placeholder = "Ngày Sinh", @class = "form-control input-with-icon", @type = "date" }) <!-- Trường nhập ngày sinh -->
+                @Html.ValidationMessageFor(m => m.Birthdate, "", new { @class = "text-danger" }) <!-- Hiển thị thông báo lỗi cho trường ngày sinh -->
+            </div>
+            <div class="input-group">
+                <!-- Nhóm nhập mật khẩu -->
+                <i class="fa fa-lock"></i> <!-- Biểu tượng cho trường mật khẩu -->
+                @Html.PasswordFor(m => m.Password, new { @placeholder = "Mật Khẩu (Ít nhất 8 chữ số và 1 ký tự đặc biệt)", @class = "form-control input-with-icon" }) <!-- Trường nhập mật khẩu -->
+                <i class="fa fa-eye toggle-password" onclick="togglePassword('Password', this)"></i> <!-- Biểu tượng để hiển thị/ẩn mật khẩu -->
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" }) <!-- Hiển thị thông báo lỗi cho trường mật khẩu -->
+            </div>
+            <div class="input-group">
+                <!-- Nhóm nhập xác nhận mật khẩu -->
+                <i class="fa fa-lock"></i> <!-- Biểu tượng cho trường xác nhận mật khẩu -->
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @placeholder = "Nhập Lại Mật Khẩu", @class = "form-control input-with-icon" }) <!-- Trường nhập xác nhận mật khẩu -->
+                <i class="fa fa-eye toggle-password" onclick="togglePassword('ConfirmPassword', this)"></i> <!-- Biểu tượng để hiển thị/ẩn xác nhận mật khẩu -->
+                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" }) <!-- Hiển thị thông báo lỗi cho trường xác nhận mật khẩu -->
+            </div>
+            <button type="submit" class="btn">ĐĂNG KÝ</button> <!-- Nút để gửi form đăng ký -->
+        </div>
+        <div class="login-link">
+            <!-- Liên kết tới trang đăng nhập -->
+            Bạn Đã Có Tài Khoản? <a asp-controller="Login" asp-action="Index">Đăng Nhập</a> <!-- Liên kết đăng nhập -->
+        </div>
+    </div>
+</form>
+
+<script>
+    // Hàm để hiển thị hoặc ẩn mật khẩu
+    function togglePassword(inputId, eyeIcon) {
+        const inputField = document.getElementById(inputId); // Lấy trường nhập mật khẩu
+        const icon = eyeIcon; // Lấy biểu tượng
+
+        // Kiểm tra và thay đổi loại trường nhập mật khẩu
+        if (inputField.type === "password") {
+            inputField.type = "text"; // Thay đổi thành text để hiển thị mật khẩu
+            icon.classList.remove("fa-eye"); // Thay đổi biểu tượng
+            icon.classList.add("fa-eye-slash");
+        } else {
+            inputField.type = "password"; // Thay đổi lại thành password để ẩn mật khẩu
+            icon.classList.remove("fa-eye-slash"); // Thay đổi biểu tượng
+            icon.classList.add("fa-eye");
+        }
+    }
+</script>

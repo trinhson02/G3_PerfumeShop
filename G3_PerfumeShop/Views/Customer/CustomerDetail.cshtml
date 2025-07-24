@@ -1,0 +1,204 @@
+﻿@model CustomerDetailViewModel
+<div class="container">
+    <h2>Customer Details</h2>
+
+    <!-- Form để hiển thị và chỉnh sửa thông tin khách hàng/liên hệ -->
+    <form asp-action="CustomerDetail" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="ImageUrl"></label>
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="Customer Avatar" style="max-width: 150px; max-height: 150px;" />
+            }
+            else
+            {
+                <p>Không có ảnh</p>
+            }
+            <span asp-validation-for="ImageUrl"></span>
+        </div>
+       
+        <div class="form-group">
+            <label asp-for="Username"></label>
+            <input asp-for="Username" />
+            <span asp-validation-for="Username"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password"  />
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName" />
+            <span asp-validation-for="FirstName"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LastName"></label>
+            <input asp-for="LastName" />
+            <span asp-validation-for="LastName"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Address"></label>
+            <input asp-for="Address" />
+            <span asp-validation-for="Address"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Phone"></label>
+            <input asp-for="Phone" />
+            <span asp-validation-for="Phone"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Birthdate"></label>
+            <input asp-for="Birthdate" type="date" />
+            <span asp-validation-for="Birthdate"></span>
+        </div>
+        <div class="form-group">
+            <label>Giới tính</label>
+            <select asp-for="Gender">
+                <option value="1">Male</option>
+                <option value="2">Female</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Trạng thái
+                <select asp-for="StatusId">
+                <option value="1">Active</option>
+                <option value="2">Ban</option>
+                </select>
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="status">Role</label>
+            <input type="text" id="status" name="status" class="form-control" value="Customer" readonly />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a asp-action="CustomerList">Hủy</a>
+    </form>
+
+    <h3>Customer/Contact Changes History</h3>
+
+    <!-- Bảng lịch sử thay đổi khách hàng/liên hệ -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Full Name</th>
+                <th>Gender</th>
+                <th>Mobile</th>
+                <th>Address</th>
+                <th>Updated By</th>
+                <th>Updated Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>lam@gmail.com</td>
+                <td>Tung Lam</td>
+                <td>Male</td>
+                <td>1234567890</td>
+                <td>12 Hoang Dieu ,Ha Noi</td>
+                <td>Customer</td>
+                <td>2024-10-10</td>
+            </tr>
+            <tr>
+                <td>lam@gmail.com</td>
+                <td>Tung Lam</td>
+                <td>Female</td>
+                <td>0987654321</td>
+                <td>58 Tran Duy Hung</td>
+                <td>Admin</td>
+                <td>2024-09-20</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- CSS -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 80%;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2, h3 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+
+    button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+</style>

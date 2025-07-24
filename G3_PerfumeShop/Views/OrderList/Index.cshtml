@@ -1,0 +1,282 @@
+﻿@model IEnumerable<G3_PerfumeShop.Models.Order>
+<link rel="stylesheet" href="@Url.Content("~/css/orderList.css")">
+
+
+<style>
+    /* Đảm bảo các form nằm trên cùng một dòng và có khoảng cách đều */
+    .filter-row {
+        display: flex;
+        flex-wrap: wrap; /* Để đảm bảo các phần tử xuống dòng nếu không đủ không gian */
+        gap: 15px; /* Khoảng cách giữa các phần tử */
+        margin-bottom: 20px;
+    }
+
+        /* Đảm bảo các phần tử con chiếm không gian phù hợp và đều nhau */
+        .filter-row .col-md-3,
+        .filter-row .col-md-6 {
+            flex: 1; /* Chia đều không gian cho các cột */
+        }
+
+    /* Đảm bảo các ô lọc theo ngày full width */
+    #dateFilterForm .form-control-sm {
+        width: 100%;
+    }
+
+    /* Căn chỉnh input group tìm kiếm */
+    .input-group .form-control-sm,
+    .input-group-text,
+    .input-group .btn-outline-secondary {
+        height: 34px; /* Đồng bộ chiều cao */
+    }
+
+    /* Đảm bảo các nút radio căn chỉnh ngang */
+    .form-check {
+        display: inline-block;
+        margin-right: 15px;
+    }
+
+    /* Đảm bảo khoảng cách giữa các phần tử trong radio group */
+    .form-check-input {
+        margin-right: 5px;
+    }
+
+    .col-md-3 me-3 {
+        margin-left: 20px;
+        padding-right: 50px;
+    }
+
+</style>
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Danh sách đặt hàng của khách hàng</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="multi-filter-select_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+
+                    <div>
+                        <div class="row align-items-center">
+                            <!-- Lọc theo ngày -->
+                            <form action="@Url.Action("Index", "OrderList")" method="get" id="dateFilterForm">
+                                <!-- Form lọc đơn hàng theo khoảng thời gian từ ngày bắt đầu đến ngày kết thúc, sử dụng phương thức GET -->
+
+                                <div class="row align-items-center">
+                                    <!-- Đảm bảo căn giữa các phần tử trong dòng -->
+                                    <!-- Phần lọc theo ngày -->
+                                    <div class="col-md-3">
+                                        <label for="filter-date">Lọc theo ngày:</label>
+                                        <!-- Nhãn hiển thị "Lọc theo ngày" cho người dùng thấy đây là bộ lọc ngày -->
+
+                                        <div class="d-flex">
+                                            <input type="date" id="filter-date-from" name="fromDate" value="@ViewBag.FromDate?.ToString("yyyy-MM-dd")" class="form-control form-control-sm" placeholder="Từ">
+                                            <!-- Trường input để chọn ngày bắt đầu của bộ lọc, giá trị mặc định lấy từ ViewBag.FromDate -->
+                                            <!-- Định dạng "yyyy-MM-dd" giúp hiển thị ngày ở định dạng chuẩn cho input date -->
+
+                                            <input type="date" id="filter-date-to" name="toDate" value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" class="form-control form-control-sm ms-2" placeholder="Đến">
+                                            <!-- Trường input để chọn ngày kết thúc của bộ lọc, giá trị mặc định lấy từ ViewBag.ToDate -->
+                                            <!-- ms-2 để tạo khoảng cách giữa hai trường input ngày -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+
+
+                            <!-- Radio buttons for completion status -->
+                            <form action="@Url.Action("Index", "OrderList")" method="get">
+                                <!-- Form dùng để lọc đơn hàng theo trạng thái và tìm kiếm theo tên khách hàng, sử dụng phương thức GET -->
+                                <!-- Phần lọc theo trạng thái -->
+                                <div class="col-md-3">
+                                    <label>Trạng thái:</label>
+                                    <!-- Nhãn cho bộ lọc trạng thái hoàn thành -->
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="status" id="completed" value="completed"
+                                        @(ViewBag.Status == "completed" ? "checked" : "") onchange="this.form.submit()">
+                                        <!-- Nút radio để chọn trạng thái "Đã hoàn thành", nếu ViewBag.Status là "completed" thì đánh dấu "checked" -->
+                                        <!-- onchange="this.form.submit()" sẽ tự động gửi form khi có thay đổi trạng thái -->
+
+                                        <label class="form-check-label" for="completed">Đã hoàn thành</label>
+                                        <!-- Nhãn hiển thị bên cạnh nút radio "Đã hoàn thành" -->
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="status" id="notCompleted" value="notCompleted"
+                                        @(ViewBag.Status == "notCompleted" ? "checked" : "") onchange="this.form.submit()">
+                                        <!-- Nút radio để chọn trạng thái "Chưa hoàn thành", nếu ViewBag.Status là "notCompleted" thì đánh dấu "checked" -->
+
+                                        <label class="form-check-label" for="notCompleted">Chưa hoàn thành</label>
+                                        <!-- Nhãn hiển thị bên cạnh nút radio "Chưa hoàn thành" -->
+                                    </div>
+                                </div>
+
+                                <!-- Phần tìm kiếm theo tên -->
+                                <div class="col-md-6 text-end">
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1">Tìm Kiếm:</span>
+                                        <!-- Nhãn cho trường tìm kiếm với nội dung "Tìm Kiếm:" -->
+
+                                        <input type="search" name="searchTerm" id="searchInput" class="form-control form-control-sm"
+                                               placeholder="Nhập tên khách hàng..." aria-label="Search" value="@ViewBag.SearchTerm">
+                                        <!-- Trường input để nhập từ khóa tìm kiếm theo tên khách hàng, giá trị lấy từ ViewBag.SearchTerm -->
+
+                                        <button class="btn btn-outline-secondary" type="submit">
+                                            <i class="bi bi-search">Tìm</i>
+                                            <!-- Nút "Tìm" với biểu tượng kính lúp, nhấn vào sẽ gửi form để thực hiện tìm kiếm -->
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-sm-12" style="margin-top: 50px">
+                        <table id="multi-filter-select" class="display table table-striped table-hover dataTable" role="grid">
+                            <thead>
+                                <tr>
+                                    <th>ID <button type="button" class="toggle-column" data-column="0">-</button></th>
+                                    <th>Ngày Đặt <button type="button" class="toggle-column" data-column="1">-</button></th>
+                                    <th>Tên Khách Hàng <button type="button" class="toggle-column" data-column="2">-</button></th>
+                                    <th>Tên Sản Phẩm <button type="button" class="toggle-column" data-column="3">-</button></th>
+                                    <th>Tổng Tiền <button type="button" class="toggle-column" data-column="4">-</button></th>
+                                    <th>Trạng Thái <button type="button" class="toggle-column" data-column="5">-</button></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model) // Lặp qua từng đơn hàng trong Model
+                                {
+                                    <tr>
+                                        <td>@order.Id</td> <!-- Hiển thị ID của đơn hàng -->
+                                        <td>@order.CreatedAt.ToString("dd/MM/yyyy")</td> <!-- Hiển thị ngày tạo của đơn hàng theo định dạng ngày/tháng/năm -->
+                                        <td>@order.User.FirstName @order.User.LastName</td> <!-- Hiển thị họ và tên của người dùng liên kết với đơn hàng -->
+                                        <td>
+                                            @if (order.OrderDetails.Any()) // Kiểm tra xem đơn hàng có chứa sản phẩm nào không
+                                            {
+                                                var firstProduct = order.OrderDetails.First().ProductSizePricing.Product.Name; // Lấy tên sản phẩm đầu tiên của đơn hàng
+                                                <p>@firstProduct</p> <!-- Hiển thị tên sản phẩm đầu tiên -->
+                                            }
+                                            else
+                                            {
+                                                <p>Không có sản phẩm</p> <!-- Nếu không có sản phẩm, hiển thị thông báo "Không có sản phẩm" -->
+                                            }
+                                        </td>
+                                        <td>
+                                            @order.OrderDetails.Sum(od => od.ProductSizePricing.Price * od.Quantity)đ <!-- Tính tổng giá trị của tất cả sản phẩm trong đơn hàng -->
+                                        </td>
+                                        <td>@(order.Status ? "Hoàn Thành" : "Chưa Hoàn Thành")</td> <!-- Hiển thị trạng thái đơn hàng: Hoàn Thành hoặc Chưa Hoàn Thành -->
+                                        <td>
+                                            <a href="@Url.Action("Index", "OrderDetail", new { orderId = order.Id })" class="btn btn-info">
+                                                Xem Chi Tiết <!-- Nút Xem Chi Tiết để xem chi tiết đơn hàng -->
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+
+                        <div>
+                            <form method="post" asp-action="ChangePageSize">
+                                <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+                                <!-- Truyền giá trị kích thước trang hiện tại vào input ẩn pageSize, giá trị được lấy từ ViewBag.PageSize -->
+
+                                <button type="submit" name="change" value="1" class="btn btn-primary">+</button>
+                                <!-- Nút bấm "+" để tăng kích thước trang lên 1, gửi giá trị change = 1 khi nhấn -->
+
+                                <button type="submit" name="change" value="-1" class="btn btn-danger">-</button>
+                                <!-- Nút bấm "-" để giảm kích thước trang xuống 1, gửi giá trị change = -1 khi nhấn -->
+                            </form>
+                        </div>
+
+
+                        <!-- Phân trang -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <!-- Trang đầu tiên -->
+                                <li class="page-item @(ViewBag.CurrentPage == 1 ? "active" : "")">
+                                    <!-- Kiểm tra nếu trang hiện tại là trang 1, thì thêm lớp "active" để hiển thị trang đó là trang được chọn -->
+                                    <a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = ViewBag.PageSize })">1</a>
+                                    <!-- Liên kết đến trang 1, với kích thước trang được lấy từ ViewBag.PageSize -->
+                                </li>
+
+                                <!-- Trang thứ hai -->
+                                <!-- Kiểm tra nếu có hơn 1 trang, thì hiển thị trang 2 -->
+                                @if (ViewBag.TotalPages > 1)
+
+                                {
+                                    <li class="page-item @(ViewBag.CurrentPage == 2 ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = 2, pageSize = ViewBag.PageSize })">2</a>
+                                        <!-- Liên kết đến trang 2 -->
+                                    </li>
+                                }
+
+                                <!-- Dấu ba chấm nếu cần sau trang thứ hai -->
+                                <!-- Kiểm tra nếu trang hiện tại lớn hơn 4, thì thêm dấu "..." để rút gọn các trang ở giữa -->
+                                @if (ViewBag.CurrentPage > 4)
+
+                                {
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                        <!-- Hiển thị dấu "..." để rút gọn các trang -->
+                                    </li>
+                                }
+
+                                <!-- Các trang gần trang hiện tại -->
+                                <!-- Vòng lặp hiển thị các trang xung quanh trang hiện tại (ví dụ: trang trước và sau trang hiện tại) -->
+                                @for (int i = Math.Max(3, ViewBag.CurrentPage - 1); i <= Math.Min(ViewBag.TotalPages - 1, ViewBag.CurrentPage + 1); i++)
+
+                                {
+                                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+                                        <!-- Liên kết đến trang hiện tại trong vòng lặp -->
+                                    </li>
+                                }
+
+                                <!-- Dấu ba chấm trước trang cuối nếu cần -->
+                                <!-- Kiểm tra nếu trang hiện tại nhỏ hơn tổng số trang trừ đi 3, thì thêm dấu "..." -->
+                                @if (ViewBag.CurrentPage < ViewBag.TotalPages - 3)
+
+                                {
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                        <!-- Hiển thị dấu "..." để rút gọn các trang trước trang cuối -->
+                                    </li>
+                                }
+
+                                <!-- Trang cuối cùng -->
+                                <!-- Kiểm tra nếu có hơn 2 trang, thì hiển thị trang cuối -->
+                                @if (ViewBag.TotalPages > 2)
+
+                                {
+                                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.TotalPages, pageSize = ViewBag.PageSize })">@ViewBag.TotalPages</a>
+                                        <!-- Liên kết đến trang cuối cùng, với số trang được lấy từ ViewBag.TotalPages -->
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+
+
+
+                        <!-- Nút khôi phục -->
+                        <button id="restoreColumns" class="btn btn-success">Khôi phục</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/listRowAndColum.js"></script>
+@section Scripts {
+
+    <script src="~/js/listRowAndColum.js"></script>
+
+}

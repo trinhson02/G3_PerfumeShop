@@ -1,0 +1,74 @@
+﻿@model G3_PerfumeShop.Models.ChangePasswordViewModel
+
+<!DOCTYPE html>
+@{
+    ViewBag.Title = "Change Password";
+}
+
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="~/css/ChangePassword.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="change-password-container">
+        <h2>Change your password</h2>
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success">
+                @ViewBag.SuccessMessage
+            </div>
+        }
+
+      
+
+        <form method="post" asp-action="ChangePassword" asp-controller="ChangePassword">
+            <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <div class="input-container">
+                    <input type="password" id="currentPassword" asp-for="CurrentPassword" class="form-control" />
+                    <span class="toggle-password">&#128065;</span>
+                </div>
+                @Html.ValidationMessageFor(m => m.CurrentPassword, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <div class="input-container">
+                    <input type="password" id="newPassword" asp-for="NewPassword" class="form-control" />
+                    <span class="toggle-password">&#128065;</span>
+                </div>
+                @Html.ValidationMessageFor(m => m.NewPassword, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-container">
+                    <input type="password" id="confirmPassword" asp-for="ConfirmPassword" class="form-control" />
+                    <span class="toggle-password">&#128065;</span>
+                </div>
+                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+            </div>
+
+            <button type="submit" class="btn-set-password">Set Password</button>
+        </form>
+    </div>
+
+</body>
+</html>
+
+<script>
+    document.querySelectorAll('.toggle-password').forEach(item => {
+        item.addEventListener('click', function () {
+            const input = this.previousElementSibling;
+            if (input.type === "password") {
+                input.type = "text";
+                input.style.border = "none";
+                input.style.backgroundColor = "#f0f0f0";
+            } else {
+                input.type = "password";
+                input.style.backgroundColor = "#fff";
+            }
+        });
+    });
+</script>

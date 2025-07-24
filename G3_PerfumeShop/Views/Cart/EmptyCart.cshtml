@@ -1,0 +1,10 @@
+﻿﻿@{
+    ViewData["Title"] = "Empty Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Trang rỗng khi không có sản phẩm -->
+<div class="container mt-5 text-center">
+    <h2>Giỏ hàng rỗng</h2>
+    <p>Có vẻ như bạn chưa thêm bất kỳ sản phẩm nào vào giỏ hàng.</p>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary mt-3">Bắt đầu mua hàng</a>
+</div>

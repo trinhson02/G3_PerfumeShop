@@ -1,0 +1,147 @@
+﻿@model G3_PerfumeShop.Models.User
+
+<div class="container">
+    <h2>User Details</h2>
+
+    <form asp-action="UpdateRoleAndStatus" asp-controller="UserDetail" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="user-info">
+            <img src="@Model.ImageUrl" alt="User Avatar" class="avatar" />
+            <h4>Full Name: @Model.FirstName @Model.LastName</h4>
+            <p>
+                <strong>Gender:</strong>
+                @{
+                    if (Model.Gender == 1)
+                    {
+                        @:Male
+                    }
+                    else if (Model.Gender == 2)
+                    {
+                        @:Female
+                    }
+                    else
+                    {
+                        @:Chưa cập nhật
+                    }
+                }
+            </p>            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Mobile:</strong> @Model.Phone</p>
+            <p><strong>Address:</strong> @Model.Address</p>
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select name="RoleId" class="form-control">
+                @foreach (var role in ViewBag.RoleList)
+                {
+                    <option value="@role.Value" selected="@role.Selected">@role.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select name="StatusId" class="form-control">
+                @foreach (var status in ViewBag.StatusList)
+                {
+                    <option value="@status.Value" selected="@status.Selected">@status.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="@Url.Action("Index", "UserList")" class="btn btn-outline-dark">Back To List</a>
+        </div>
+    </form>
+</div>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 80%;
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .user-info {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .avatar {
+        max-width: 150px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+
+    button, .btn {
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-outline-dark {
+        border: 1px solid #343a40;
+        color: #343a40;
+        background-color: transparent;
+    }
+
+        .btn-outline-dark:hover {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>

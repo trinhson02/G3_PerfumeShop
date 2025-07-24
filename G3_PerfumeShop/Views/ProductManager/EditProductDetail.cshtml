@@ -1,0 +1,81 @@
+﻿@model EditProductDetailViewModel
+<link rel="stylesheet" type="text/css" href="~/css/editproductdetail.css" />
+
+<h2>Chỉnh sửa thông tin sản phẩm</h2>
+<form asp-action="EditProductDetail" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label>Tên sản phẩm:</label>
+        <input type="text" asp-for="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Ảnh sản phẩm:</label>
+        <input type="text" asp-for="ImageUrl" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Mô tả:</label>
+        <textarea asp-for="Description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Năm phát hành:</label>
+        <input type="number" asp-for="ReleaseYear" />
+        <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Độ bền:</label>
+        <input type="number" asp-for="Longevity" />
+        <span asp-validation-for="Longevity" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Nồng độ:</label>
+        <input type="number" asp-for="Concentration" />
+        <span asp-validation-for="Concentration" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Điểm:</label>
+        <input type="number" asp-for="Point" />
+        <span asp-validation-for="Point" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Giới tính:</label>
+        <select asp-for="GenderId" asp-items="@(new SelectList(Model.Genders, "Id", "Name"))">
+            <option value="">Chọn giới tính</option>
+        </select>
+        <span asp-validation-for="GenderId" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Thương hiệu:</label>
+        <select asp-for="BrandId" asp-items="@(new SelectList(Model.Brands, "Id", "Name"))">
+            <option value="">Chọn thương hiệu</option>
+        </select>
+        <span asp-validation-for="BrandId" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Nơi xuất xứ:</label>
+        <select asp-for="OriginId" asp-items="@(new SelectList(Model.Origins, "Id", "Name"))">
+            <option value="">Chọn nơi xuất xứ</option>
+        </select>
+        <span asp-validation-for="OriginId" class="text-danger"></span>
+    </div>
+
+    <button type="submit">Cập nhật</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

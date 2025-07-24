@@ -1,0 +1,98 @@
+﻿<link rel="stylesheet" href="~/css/orderDetail.css">
+
+<div class="body d-flex py-3">
+    <div class="container-xxl">
+        <div class="container-fluid">
+            <div class="row g-3 mb-3">
+                <!-- Order Summary -->
+                <div class="col-xxl-8 col-xl-12">
+                    <div class="card">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h6 class="mb-0 fw-bold">Chi tiết cài đặt</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="product-cart">
+                                <div class="checkout-table table-responsive">
+                                    <div id="myCartTable_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                                        <div class="col-sm-12">
+                                            <table id="myCartTable" class="table display dataTable table-hover align-middle nowrap no-footer dtr-inline" style="width: 100%;" role="grid">
+                                                <thead>
+                                                    <tr role="row">
+                                                        <th>Tên Nhân Viên</th>
+                                                        <th>Vai trò cũ</th>
+                                                        <th>Vai trò mới</th>
+                                                        <th>Người thay đổi</th>
+                                                        <th>Ngày thay đổi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var record in Model)
+                                                    {
+                                                        <tr>
+                                                            <td class="dt-body-right">
+                                                                @record.User.FirstName @record.User.LastName
+                                                            </td>
+                                                            <td class="dt-body-right">@record.OldRole.Name</td>
+                                                            <td class="dt-body-right">@record.NewRole.Name</td>
+                                                            <td class="dt-body-right">
+                                                                @record.ChangedByNavigation.FirstName @record.ChangedByNavigation.LastName
+                                                            </td>
+                                                            <td class="dt-body-right">@record.ChangeDate.ToString("dd/MM/yyyy")</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role Update Form -->
+                <div class="col-xxl-4 col-xl-12">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <form action="@Url.Action("UpdateRole", "SettingDetail")" method="post">
+                                <input type="hidden" name="userId" value="@ViewBag.UserId" />
+                                <!-- Truyền giá trị userId vào input ẩn để xác định người dùng cần cập nhật vai trò -->
+
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-12">
+                                        <label for="role" class="form-label">Vai trò mới</label>
+                                        <!-- Nhãn cho trường chọn vai trò mới -->
+
+                                        <select name="newRoleId" class="form-select" id="role">
+                                            <!-- Thẻ select để chọn vai trò mới cho người dùng -->
+                                            @foreach (var role in ViewBag.AvailableRoles)
+                                            {
+                                                <option value="@role.Id">@role.Name</option>
+                                                <!-- Duyệt qua các vai trò có sẵn từ ViewBag.AvailableRoles và hiển thị trong danh sách tùy chọn -->
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="comment" class="form-label">Ghi Chú</label>
+                                        <!-- Nhãn cho trường ghi chú -->
+
+                                        <textarea class="form-control" id="comment" name="note" rows="4">Thay đổi vai trò cho nhân viên...</textarea>
+                                        <!-- Trường textarea cho ghi chú về lý do thay đổi vai trò, với nội dung mặc định là "Thay đổi vai trò cho nhân viên..." -->
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary mt-4 text-uppercase">Cập nhật</button>
+                                <!-- Nút gửi để thực hiện cập nhật vai trò -->
+
+                                <a class="nav-link" asp-controller="SettingList" asp-action="Index">Quay lại danh sách cài đặt</a>
+                                <!-- Liên kết trở về trang danh sách cài đặt -->
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

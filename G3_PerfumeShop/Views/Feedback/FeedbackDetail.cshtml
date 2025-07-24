@@ -1,0 +1,153 @@
+﻿@model Feedback
+
+@{
+    ViewBag.Title = "Feedback Detail";
+}
+<link rel="stylesheet" type="text/css" href="~/css/feedbackdetail.css" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+<div class="container mt-5">
+    <h2 class="text-center">Feedback Detail</h2>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Contact Information</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Full Name:</strong> @Model.User.FirstName @Model.User.LastName</p>
+            <p><strong>Email:</strong> @Model.User.Email</p>
+            <p><strong>Mobile:</strong> @Model.User.Phone</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Product Information</h4>
+        </div>
+        <div class="card-body">
+            <p>
+                <strong>Product:</strong>
+                @{
+                    var product = Model.Order.OrderDetails.FirstOrDefault()?.ProductSizePricing?.Product;
+                    if (product != null)
+                    {
+                        <span>@product.Name</span>
+                    }
+                    else
+                    {
+                        <span>No Product</span>
+                    }
+                }
+            </p>
+            <p><strong>Rated Star:</strong> @Model.Rating</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Feedback Content</h4>
+        </div>
+        <div class="card-body">
+            <p>@Model.Content</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Images and Videos</h4>
+        </div>
+        <div class="card-body text-center">
+            <div class="media-wrapper">
+                @if (Model.Sources.Any())
+                {
+                    foreach (var source in Model.Sources)
+                    {
+                        <div class="media-container">
+                            @if (source.Url.EndsWith(".jpg") || source.Url.EndsWith(".png"))
+                            {
+                                <img src="@source.Url" alt="Feedback Image" class="img-thumbnail" />
+                                <p class="caption">@source.Caption</p> <!-- Chú thích -->
+                            }
+                            else if (source.Url.EndsWith(".mp4"))
+                            {
+                                <video controls>
+                                    <source src="@source.Url" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <p class="caption">@source.Caption</p> <!-- Chú thích -->
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No images or videos available.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Status</h4>
+        </div>
+        <div class="card-body">
+            <p>@(Model.Status ? "Visible" : "Hidden")</p>
+        </div>
+    </div>
+    <!-- Nút thay đổi trạng thái -->
+    <form method="post" asp-action="ChangeFeedbackStatus" asp-controller="Feedback" class="text-center">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <input type="hidden" name="status" value="@(Model.Status ? "false" : "true")" />
+        <button type="submit" class="btn btn-warning">
+            @(Model.Status ? "Hide Feedback" : "Show Feedback")
+        </button>
+    </form>
+    <!-- Form phản hồi -->
+    <div class="card mb-4 mt-4">
+        <div class="card-header">
+            <h4>Send a Response</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="SendResponse" asp-controller="Feedback" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="feedbackId" value="@Model.Id" />
+
+                <div class="form-group">
+                    <label for="responseContent">Response Content:</label>
+                    <textarea name="responseContent" id="responseContent" class="form-control" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="files">Upload Files (Images or Videos):</label>
+                    <input type="file" name="files" class="form-control-file" multiple id="fileInput" />
+                </div>
+
+                <div id="captionsContainer"></div>
+
+                <button type="submit" class="btn btn-success">Send Response</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Nút quay lại danh sách feedback -->
+    <div class="text-center mt-3">
+        <a href="@Url.Action("FeedbackList")" class="btn btn-primary">Back to Feedback List</a>
+    </div>
+</div>
+<script>
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const captionsContainer = document.getElementById('captionsContainer');
+        captionsContainer.innerHTML = ''; // Xóa các caption cũ
+
+        const files = event.target.files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const captionInput = document.createElement('div');
+            captionInput.className = 'form-group';
+            captionInput.innerHTML = `
+                <label for="caption_${i}">Caption for ${file.name}:</label>
+                <input type="text" name="captions" id="caption_${i}" class="form-control" placeholder="Enter caption for ${file.name}" required />
+            `;
+            captionsContainer.appendChild(captionInput);
+        }
+    });
+</script>

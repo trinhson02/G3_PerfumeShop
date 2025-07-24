@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <!-- Liên kết tới file CSS -->
+    <link rel="stylesheet" href="~/css/forgotpassword.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Forgot Password Form Section -->
+    <div class="forgot-container">
+        <h2>ĐẶT LẠI MẬT KHẨU</h2>
+        <div class="forgot-content">
+            <!-- Nhập email -->
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email" required>
+                <span id="emailError" class="error-message"></span>
+            </div>
+            <button class="btn" id="sendOtpBtn">Nhận Mã</button>
+
+            <!-- Xác thực OTP, ẩn mặc định -->
+            <div class="otp-group" style="display:none;">
+                <input type="text" id="otp" placeholder="Mã OTP" required>
+                <span id="otpError" class="error-message"></span>
+                <button class="btn verify-btn" id="verifyOtpBtn">Xác Thực</button>
+            </div>
+
+            <!-- Form đặt lại mật khẩu mới, ẩn mặc định -->
+            <div class="reset-password-group" style="display:none;">
+                <div class="input-group">
+                    <input type="password" id="newPassword" placeholder="Mật khẩu mới (Ít nhất 8 chữ số và 1 ký tự đặc biệt)" required>
+                    <span id="newPasswordError" class="error-message"></span>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="confirmNewPassword" placeholder="Nhập lại mật khẩu mới" required>
+                    <span id="confirmPasswordError" class="error-message"></span>
+                </div>
+                <button class="btn reset-btn" id="resetPasswordBtn">Đặt lại mật khẩu</button>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- JavaScript xử lý sự kiện -->
+    <script>
+        // Gửi mã OTP
+        document.getElementById('sendOtpBtn').addEventListener('click', function () {
+            var email = document.getElementById('email').value;
+            if (email) {
+                // Gửi yêu cầu gửi OTP qua email
+                fetch('/ForgotPassword/SendOtp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Hiển thị form nhập OTP
+                            document.querySelector('.otp-group').style.display = 'block';
+                        } else {
+                            document.getElementById('emailError').textContent = "Email không tồn tại.";
+                        }
+                    });
+            }
+        });
+
+
+
+        document.getElementById('verifyOtpBtn').addEventListener('click', function () {
+            var email = document.getElementById('email').value;
+            var otp = document.getElementById('otp').value;
+            console.log('Verifying OTP...'); // Log to see if this function gets called
+
+            if (otp) {
+                fetch('/ForgotPassword/VerifyOtp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, otp: otp })
+                }).then(response => response.json())
+                    .then(data => {
+                        console.log('OTP verification response:', data); // Log the response data
+                        if (data.success) {
+                            document.querySelector('.reset-password-group').style.display = 'block';  
+                            document.querySelector('.otp-group').style.display = 'none';             
+                            document.querySelector('.input-group').style.display = 'none';          
+                            document.getElementById('sendOtpBtn').style.display = 'none';
+                        } else {
+                            document.getElementById('otpError').textContent = "Mã OTP không hợp lệ hoặc đã hết hạn.";
+                        }
+                    }).catch(error => {
+                        console.error('Error verifying OTP:', error);
+                    });
+            }
+        });
+
+
+
+
+        document.getElementById('resetPasswordBtn').addEventListener('click', function () {
+            var email = document.getElementById('email').value;
+            var newPassword = document.getElementById('newPassword').value;
+            var confirmNewPassword = document.getElementById('confirmNewPassword').value;
+           
+            if (newPassword.length < 8) {
+                document.getElementById('newPasswordError').textContent = "Mật khẩu phải chứa ít nhất 8 ký tự.";
+                return;
+            } else if (newPassword !== confirmNewPassword) {
+                document.getElementById('confirmPasswordError').textContent = "Mật khẩu xác nhận không khớp.";
+                return;
+            } else {
+                document.getElementById('newPasswordError').textContent = "";
+                document.getElementById('confirmPasswordError').textContent = "";
+
+                fetch('/ForgotPassword/ResetPassword', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, newPassword: newPassword })
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            window.location.href = '/Login';
+                        } else {
+                            alert("Có lỗi xảy ra: " + data.error);
+                        }
+                    });
+            }
+        });
+
+
+    </script>
+</body>
+</html>

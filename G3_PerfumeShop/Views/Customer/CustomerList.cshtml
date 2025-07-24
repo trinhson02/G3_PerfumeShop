@@ -1,0 +1,84 @@
+﻿@model CustomerListViewModel
+<link rel="stylesheet" type="text/css" href="~/css/bootstrap.css" />
+<div>
+    <form method="get">
+        <input type="text" name="searchTerm" value="@Model.SearchTerm" placeholder="Tìm kiếm theo tên, email, điện thoại" />
+        <select name="statusId">
+            <option value="">-- Lọc theo trạng thái --</option>
+            @foreach (var status in Model.Statuses)
+            {
+                <option value="@status.Id" selected="@(status.Id == Model.StatusId ? "selected" : null)">@status.Name</option>
+            }
+        </select>
+        <button type="submit">Tìm kiếm</button>
+    </form>
+    <div style="text-align: right; margin-bottom: 20px;">
+        <a href="/Customer/AddNewCustomer" class="btn btn-primary">Thêm mới khách hàng</a>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach (var column in Model.DynamicColumns)
+                {
+                    <th>@Html.ActionLink(column, "CustomerList", new { sortOrder = Model.SortOrder == $"{column.ToLower()}_asc" ? $"{column.ToLower()}_desc" : $"{column.ToLower()}_asc" })</th>
+                }
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.Customers)
+            {
+                <tr>
+                    @foreach (var column in Model.DynamicColumns)
+                    {
+                        <td>
+                            @if (column == "ID")
+                            {
+                                @customer.Id
+                            }
+                            else if (column == "FirstName")
+                            {
+                                @customer.FirstName
+                            }
+                            else if (column == "LastName")
+                            {
+                                @customer.LastName
+                            }
+                            else if (column == "Email")
+                            {
+                                @customer.Email
+                            }
+                            else if (column == "Phone")
+                            {
+                                @customer.Phone
+                            }
+                            else if (column == "Birthdate")
+                            {
+                                @customer.Birthdate.ToString("dd/MM/yyyy")
+                            }
+                            else if (column == "Gender")
+                            {
+                                @customer.GenderDisplay
+                            }
+                            else if (column == "Status")
+                            {
+                                @customer.Status.Name
+                            }
+                        </td>
+                    }
+                    <td>
+                        <a href="/Customer/CustomerDetail/@customer.Id">Chi tiết</a> |  
+                        <a href="#" onclick="confirmDelete(@customer.Id)">Xóa</a> |
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="pagination">
+        @for (int i = 1; i <= (Model.TotalItems + Model.PageSize - 1) / Model.PageSize; i++)
+        {
+            <a href="?page=@i">@i</a>
+        }
+    </div>
+</div>
+<script src="~/js/confirmDelete.js" asp-append-version="true"></script>

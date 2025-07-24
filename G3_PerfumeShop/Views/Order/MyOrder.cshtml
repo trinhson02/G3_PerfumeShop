@@ -1,0 +1,99 @@
+﻿@model List<Order>
+
+@{
+    ViewData["Title"] = "Order List";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Danh sách đặt hàng</h2>
+    <!-- Form thông tin đơn hàng -->
+    <table class="table table-hover table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>    
+                <th scope="col">ID</th>
+                <th scope="col">Ngày tạo</th>
+                <th scope="col">ID người dùng</th>
+                <th scope="col">Tình trạng</th>
+                <th scope="col">Địa chỉ giao hang</th>
+                <th scope="col">Địa chỉ email</th>
+                <th scope="col">Số điện thoại</th>
+
+                <th scope="col">Họ </th>
+                <th scope="col">Tên</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@order.UserId</td>
+                    <td>
+                        <span class="badge @(!order.Status ? "badge-success" : "badge-warning")">
+                            @(!order.Status ? "Completed" : "Pending")
+                        </span>
+                    </td>
+                <td>
+                        @if (!string.IsNullOrEmpty(order.ShippingAddress))
+                    {
+                        <ul>
+                                @foreach (var addressLine in order.ShippingAddress.Split('|'))
+                            {
+                                <li>@addressLine</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>"No address found"</p>
+                    }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(order.ShippingEmail))
+                        {
+                            <ul>
+                                @foreach (var email in order.ShippingEmail.Split('|'))
+                                {
+                                    <li>@email</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>"No Email found"</p>
+                        }
+                    </td>
+                    <td>@order.Phone </td>
+
+                    <td>@order.FirstName </td>
+                <td>@order.LastName </td>
+                    <td>@order.PaymentMethod </td>
+                </tr>
+            }
+            
+        </tbody>
+    </table>
+</div>
+
+<style>
+    /* Add some custom styling for better aesthetics */
+    table {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    h2 {
+        font-weight: bold;
+        color: #4a4a4a;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+</style>

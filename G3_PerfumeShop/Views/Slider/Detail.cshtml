@@ -1,0 +1,83 @@
+﻿@model G3_PerfumeShop.Models.Slider
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết Slider</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea,
+        input[type="file"],
+        button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chi tiết Slider</h1>
+
+        <form asp-action="UploadImage" asp-controller="Slider" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Tiêu đề:</label>
+                <input type="text" asp-for="Title" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Hình ảnh:</label>
+                <div>
+                    <img src="@Model.ImagePath" alt="Slider Image" width="200">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Trạng thái:</label>
+                <input type="checkbox" asp-for="Status" />
+            </div>
+
+            <div class="form-group">
+                <label>Ghi chú:</label>
+                <textarea asp-for="Notes" class="form-control"></textarea>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+﻿/* Login Form Section */
+.login-container {
+    background-color: #3E8894;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    width: 550px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.login-content {
+    padding: 20px; /* Thêm padding để tạo khoảng cách giữa nội dung và viền */
+    background-color: #264653;
+    border-radius: 10px;
+    width: 100%; /* Đảm bảo nội dung không bị thu hẹp */
+    box-sizing: border-box; /* Đảm bảo padding không ảnh hưởng tới kích thước tổng */
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        padding-left: 40px;
+        border: none;
+        border-radius: 5px;
+        outline: none;
+        
+    }
+
+    .input-group i {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        color: #264653;
+    }
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px; /* Điều chỉnh khoảng cách */
+}
+
+    .actions label, .actions a {
+        color: #f1faee;
+        font-size: 14px;
+        text-decoration: none; /* Không gạch chân mặc định */
+    }
+
+        .actions a:hover {
+            text-decoration: underline; /* Gạch chân khi hover */
+        }
+
+    
+.btn {
+    width: 100%;
+    background-color: #1d3557;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px; /* Thêm một chút margin-top nếu muốn để cách đều */
+}
+
+    .btn:hover {
+        background-color: #457b9d;
+    }
+
+
+.register-link {
+    margin-top: 20px;
+    text-align: center;
+    background-color: #264653;
+    border-radius: 10px;
+    width: 100%; 
+    box-sizing: border-box;
+}
+
+.register-link a {
+    color: white;
+    text-decoration: none;
+    display: block; /* Đặt thẻ a thành block để lấp đầy toàn bộ không gian */
+    padding: 15px;
+}
+
+    .register-link:hover {
+        background-color: #457b9d;
+    }

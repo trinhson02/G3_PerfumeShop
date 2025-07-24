@@ -1,0 +1,55 @@
+﻿/* Styles for the checkout totals section */
+.checkout-coupon-total {
+    width: 100%; /* Full width to ensure it occupies all the horizontal space */
+    padding: 20px; /* Add padding for better spacing */
+    background-color: #f8f8f8; /* Light background for the section */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+.checkout-total {
+    width: 400px; /* Fixed width or as required */
+}
+
+.single-total {
+    display: flex; /* Use flexbox to align items on the same line */
+    justify-content: space-between; /* Space between the title and the price */
+    margin-bottom: 10px; /* Margin bottom for spacing between items */
+}
+
+    .single-total p {
+        margin: 0; /* Remove default margin for a clean alignment */
+        font-size: 16px; /* Font size for readability */
+    }
+
+    .single-total .value {
+        font-weight: bold; /* Bold font for the title */
+    }
+
+.total-payable {
+    font-size: 18px; /* Slightly larger font size for total payable */
+    font-weight: bold; /* Bold font to highlight this line */
+    color: #000; /* Optional: make it stand out more if needed */
+}
+
+@media (min-width: 1400px) { /* Adjust based on your breakpoint definitions */
+    .col-xxl-8 {
+        flex: 0 0 auto;
+        width: 66.66667%;
+    }
+
+    .col-xxl-4 {
+        flex: 0 0 auto;
+        width: 33.33333%;
+    }
+}
+
+/* Ensure that there's no padding or margin issues */
+.row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+    .row [class^="col-"] {
+        padding-right: 15px;
+        padding-left: 15px;
+    }

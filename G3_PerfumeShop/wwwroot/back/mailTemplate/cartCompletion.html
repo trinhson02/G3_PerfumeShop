@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác nhận đơn hàng hoàn tất</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #0073e6;
+        }
+
+        .order-details, .shipping-info {
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+            .order-details table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+            }
+
+            .order-details table, .order-details th, .order-details td {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            .order-details th {
+                background-color: #f4f4f4;
+                color: #333;
+                text-align: left;
+            }
+
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Xác nhận đơn hàng hoàn tất</h2>
+        <p>Xin chào {UserName},</p>
+        <p>Cảm ơn bạn đã hoàn tất đơn hàng. Dưới đây là chi tiết đơn hàng của bạn:</p>
+
+        <div class="shipping-info">
+            <h3>Địa chỉ giao hàng</h3>
+            <p>{ShippingAddress}</p>
+        </div>
+
+        <div class="order-details">
+            <h3>Chi tiết sản phẩm</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Kích thước</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Bắt đầu danh sách sản phẩm -->
+                    {OrderItems}
+                    <!-- Kết thúc danh sách sản phẩm -->
+                </tbody>
+            </table>
+            <p class="total">Tổng cộng: {TotalAmount}</p>
+        </div>
+
+        <p class="footer">Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với bộ phận hỗ trợ khách hàng của chúng tôi. Cảm ơn bạn đã mua sắm cùng chúng tôi!</p>
+    </div>
+</body>
+</html>

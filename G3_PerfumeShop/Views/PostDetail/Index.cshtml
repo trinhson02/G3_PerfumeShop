@@ -1,0 +1,255 @@
+﻿@model G3_PerfumeShop.Models.Blog
+@{
+    ViewBag.Title = "Post Detail";
+}
+<style>
+    /* Container and Layout */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Blog Post Section */
+    .display-4 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .text-muted {
+        font-size: 1rem;
+    }
+
+    .badge {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-warning {
+        background-color: #ffc107;
+    }
+
+    /* Buttons */
+    .btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+        margin-right: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-outline-dark {
+        border-color: #343a40;
+        color: #343a40;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+
+    .btn-sm {
+        font-size: 0.875rem;
+        padding: 5px 10px;
+    }
+
+    /* Blog Post Image */
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Related Posts Section */
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        color: #6c757d;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    /* Comments Section */
+    .media {
+        margin-bottom: 20px;
+    }
+
+        .media img {
+            border-radius: 50%;
+        }
+
+    .media-body {
+        margin-left: 15px;
+    }
+
+        .media-body h5 {
+            font-size: 1.125rem;
+            font-weight: bold;
+        }
+
+        .media-body p {
+            font-size: 1rem;
+        }
+
+        .media-body .btn-sm {
+            margin-top: 5px;
+        }
+
+    /* Spacing and Margins */
+    .mt-4 {
+        margin-top: 40px;
+    }
+
+    .mb-2 {
+        margin-bottom: 10px;
+    }
+
+    .mb-4 {
+        margin-bottom: 20px;
+    }
+
+    .my-4 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+</style>
+<div class="container mt-4">
+    <div class="row">
+        <!-- Blog Post Image -->
+        <div class="col-md-5">
+            <img src="@Model.ImageUrl" class="img-fluid rounded" alt="Thumbnail" />
+        </div>
+
+        <!-- Blog Post Details -->
+        <div class="col-md-7">
+            <h1 class="display-4">@Model.Title</h1>
+            <div class="d-flex flex-row justify-content-between mb-2">
+                <div class="text-muted">
+                    <span><strong>Author:</strong> @Model.Author</span><br />
+                    <span><strong>Category:</strong> @Model.BlogCategory.Name</span><br />
+                    <span><strong>Published:</strong> @Model.CreatedAt.ToString("MMMM dd, yyyy")</span>
+                </div>
+                <div>
+                    <span class="badge @(Model.BlogStatusId == 1 ? "badge-success" : "badge-warning")">@Model.BlogStatus.Name</span>
+                </div>
+            </div>
+            <hr />
+            <p class="lead">@Model.BlogContent</p>
+
+            <div class="mt-4">
+                <a href="@Url.Action("EditPost","EditPost", new{id = Model.Id})" class="btn btn-primary">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+                @*@if (Model.BlogStatusId == 1)
+                {
+                    <a href="#" class="btn btn-secondary">Set as Pending</a>
+                }
+                else
+                {
+                    <a href="#" class="btn btn-success">Publish Post</a>
+                }*@
+                <a href="@Url.Action("Index", "PostManagement")" class="btn btn-outline-dark">Back To List</a>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4" />
+
+    <h3>Related Posts </h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top" src="https://via.placeholder.com/150" alt="Related Post 1">
+                <div class="card-body">
+                    <h5 class="card-title">Beauty Hacks</h5>
+                    <p class="card-text">Quick beauty tips and tricks you can try at home.</p>
+                    <a href="#" class="btn btn-primary">View Post</a>
+                    <a href="#" class="btn btn-warning">Edit</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top" src="https://via.placeholder.com/150" alt="Related Post 2">
+                <div class="card-body">
+                    <h5 class="card-title">Skincare Routine</h5>
+                    <p class="card-text">A complete guide to flawless skin every day.</p>
+                    <a href="#" class="btn btn-primary">View Post</a>
+                    <a href="#" class="btn btn-warning">Edit</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top" src="https://via.placeholder.com/150" alt="Related Post 3">
+                <div class="card-body">
+                    <h5 class="card-title">Lifestyle Tips</h5>
+                    <p class="card-text">Discover ways to live a healthy, balanced life.</p>
+                    <a href="#" class="btn btn-primary">View Post</a>
+                    <a href="#" class="btn btn-warning">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Comments Section -->
+    <hr class="my-4" />
+    <h3>Manage Comments</h3>
+    <div class="media mb-4">
+        <img class="mr-3 rounded-circle" src="https://via.placeholder.com/50" alt="User avatar">
+        <div class="media-body">
+            <h5 class="mt-0">Jane Doe</h5>
+            Great post! I learned a lot about fragrances.
+            <!-- Comment Management Buttons -->
+            <div>
+                <a href="#" class="btn btn-danger btn-sm">Delete Comment</a>
+                <a href="#" class="btn btn-warning btn-sm">Edit Comment</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="media mb-4">
+        <img class="mr-3 rounded-circle" src="https://via.placeholder.com/50" alt="User avatar">
+        <div class="media-body">
+            <h5 class="mt-0">Alex Smith</h5>
+            Very informative. Looking forward to more articles on this topic.
+            <div>
+                <a href="#" class="btn btn-danger btn-sm">Delete Comment</a>
+                <a href="#" class="btn btn-warning btn-sm">Edit Comment</a>
+            </div>
+        </div>
+    </div>
+</div>

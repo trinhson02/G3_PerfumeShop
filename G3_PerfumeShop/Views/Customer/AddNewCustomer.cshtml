@@ -1,0 +1,79 @@
+﻿﻿@{
+    Layout = null;
+}
+@model AddCustomerViewModel
+<link rel="stylesheet" type="text/css" href="~/css/addnewcustomer.css" />
+
+<h2>Thêm Khách hàng mới</h2>
+
+<form asp-action="AddNewCustomer" method="post">
+    <div>
+        <label asp-for="Username"></label>
+        <input asp-for="Username" />
+        <span asp-validation-for="Username"></span>
+    </div>
+
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName"></span>
+    </div>
+
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName"></span>
+    </div>
+    <div>
+        <label asp-for="Address"></label>
+        <input asp-for="Address" />
+        <span asp-validation-for="Address"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+
+    <div>
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" />
+        <span asp-validation-for="Phone"></span>
+    </div>
+
+    <div>
+        <label asp-for="Birthdate"></label>
+        <input asp-for="Birthdate" type="date" />
+        <span asp-validation-for="Birthdate"></span>
+    </div>
+
+    <div>
+        <label>Giới tính</label>
+        <select asp-for="Gender">
+            <option value="1">Male</option>
+            <option value="2">Female</option>
+        </select>
+    </div>
+
+    <div>
+        <label asp-for="StatusId"></label>
+        <select asp-for="StatusId" asp-items="@(new SelectList(Model.Statuses, "Id", "Name"))">
+            <option value="">-- Chọn trạng thái --</option>
+        </select>
+        <span asp-validation-for="StatusId" class="text-danger"></span>
+    </div>
+
+    <button type="submit">Lưu</button>
+    <a asp-action="CustomerList">Hủy</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

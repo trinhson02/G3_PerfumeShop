@@ -1,0 +1,130 @@
+﻿<link rel="stylesheet" href="~/css/orderList.css">
+
+@model IEnumerable<G3_PerfumeShop.Models.User>
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Danh sách cài đặt</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="multi-filter-select_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                    <form method="get" action="@Url.Action("Index")">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 text-end">
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1">Tìm kiếm:</span>
+                                    <input type="search" name="searchTerm" id="searchInput" class="form-control form-control-sm"
+                                           placeholder="Nhập tên nhân viên..." aria-label="Search" value="@ViewBag.SearchTerm">
+                                    <button class="btn btn-outline-secondary" type="submit">
+                                        <i class="bi bi-search">Tìm</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="col-sm-12" style="padding-top: 30px ">
+                        <table id="multi-filter-select" class="display table table-striped table-hover dataTable" role="grid">
+                            <thead>
+                                <tr>
+                                    <th>ID <button type="button" class="toggle-column" data-column="0">-</button></th>
+                                    <th>Tên nhân viên<button type="button" class="toggle-column" data-column="1">-</button></th>
+                                    <th>Trạng thái<button type="button" class="toggle-column" data-column="2">-</button></th>
+                                    <th>Vai trò <button type="button" class="toggle-column" data-column="3">-</button></th>
+                                    <th>Ghi chú<button type="button" class="toggle-column" data-column="4">-</button></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Model)
+                                {
+                                    <tr>
+                                        <td>@user.Id</td>
+                                        <td>@user.FirstName @user.LastName</td>
+                                        <td>@user.Status.Name</td>
+                                        <td>@user.Role.Name</td>
+                                        <td>@user.Role.Description</td>
+                                        <td>
+                                            <a href="@Url.Action("Index", "SettingDetail", new { userId = user.Id })" class="btn btn-info">
+                                                Xem Chi Tiết
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <div>
+                            <form method="post" asp-action="ChangePageSize">
+                                <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+                                <button type="submit" name="change" value="1" class="btn btn-primary">+</button>
+                                <button type="submit" name="change" value="-1" class="btn btn-danger">-</button>
+                            </form>
+                        </div>
+
+                        <!-- Phân trang -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <!-- First page -->
+                                <li class="page-item @(ViewBag.CurrentPage == 1 ? "active" : "")">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = ViewBag.PageSize })">1</a>
+                                </li>
+
+                                <!-- Second page -->
+                                @if (ViewBag.TotalPages > 1)
+                                {
+                                    <li class="page-item @(ViewBag.CurrentPage == 2 ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = 2, pageSize = ViewBag.PageSize })">2</a>
+                                    </li>
+                                }
+
+                                <!-- Ellipsis if needed -->
+                                @if (ViewBag.TotalPages > 3 && ViewBag.CurrentPage > 3)
+                                {
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                }
+
+                                <!-- Current page if not the first or second -->
+                                @if (ViewBag.CurrentPage > 2 && ViewBag.CurrentPage < ViewBag.TotalPages)
+                                {
+                                    <li class="page-item active">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage, pageSize = ViewBag.PageSize })">@ViewBag.CurrentPage</a>
+                                    </li>
+                                }
+
+                                <!-- Ellipsis before the last page -->
+                                @if (ViewBag.TotalPages > 3 && ViewBag.CurrentPage < ViewBag.TotalPages - 2)
+                                {
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                }
+
+                                <!-- Last page -->
+                                @if (ViewBag.TotalPages > 1)
+                                {
+                                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.TotalPages, pageSize = ViewBag.PageSize })">@ViewBag.TotalPages</a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+
+                        <!-- Nút khôi phục -->
+                        <button id="restoreColumns" class="btn btn-success">Khôi phục</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script src="~/js/SettingList.js"></script>
+
+}

@@ -1,0 +1,386 @@
+﻿@model Tuple<G3_PerfumeShop.Models.Product, IEnumerable<G3_PerfumeShop.Models.Product>>
+
+@{
+    var productDetail = Model.Item1;
+    var relatedProducts = Model.Item2;
+    ViewData["Title"] = "Product Detail & Search Results";
+}
+
+<style>
+    .feedback-response {
+        margin-top: 20px;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+    }
+
+    .response-item {
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+    }
+
+        .response-item p {
+            margin: 0;
+        }
+
+    .response-media img,
+    .response-media video {
+        max-width: 100%;
+        margin: 5px 0;
+    }
+
+    .product-detail {
+        padding: 50px 0;
+    }
+
+    .product-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .product-info {
+        padding: 20px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        background-color: #fff;
+        margin-top: 20px;
+    }
+
+    .product-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .product-price {
+        font-size: 24px;
+        color: #e74c3c;
+        margin-bottom: 10px;
+    }
+
+    .product-category {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .product-description {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .add-to-cart button {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 18px;
+        transition: background-color 0.3s ease;
+    }
+
+        .add-to-cart button:hover {
+            background-color: #218838;
+        }
+
+    .feedback-list {
+        margin-top: 30px;
+        padding: 20px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .feedback-item {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .feedback-media video,
+    .feedback-media img {
+        display: block;
+        margin: 10px 0;
+        max-width: 100%;
+    }
+
+    .sidebar {
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #eee;
+        border-radius: 8px;
+    }
+
+    .search-box input {
+        border-radius: 25px;
+        padding: 10px 15px;
+        width: calc(100% - 40px);
+        margin-right: 10px;
+    }
+
+    .search-box button {
+        padding: 10px 15px;
+        border-radius: 25px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    .search-results ul,
+    .categories ul,
+    .latest-products ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .search-results ul li,
+        .categories ul li,
+        .latest-products ul li {
+            margin-bottom: 10px;
+        }
+
+            .search-results ul li a,
+            .categories ul li a,
+            .latest-products ul li a {
+                text-decoration: none;
+                color: #000;
+                font-weight: bold;
+            }
+</style>
+<section class="product-detail container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="product-image">
+                <img src="@productDetail.ImageUrl" alt="@productDetail.Name" class="img-fluid rounded">
+            </div>
+            <div class="product-info mt-4">
+                <h3 class="product-title">@productDetail.Name</h3>
+                <div class="product-size">
+                    <label for="sizeSelect">Chọn kích thước:</label>
+                    <select id="sizeSelect" class="form-select">
+                        <option value="">Chọn kích thước</option>
+                        @foreach (var sizePricing in Model.Item1.ProductSizePricings)
+                        {
+                            <option value="@sizePricing.Price" data-price="@sizePricing.Price">@sizePricing.Size</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="product-price mt-3">
+                    <span id="productPrice">Vui lòng chọn kích thước để xem giá</span>
+                </div>
+                <div class="product-category">Danh Mục: @productDetail.ProductCategory.Name</div>
+                <div class="product-description">
+                    <p><strong>Thương hiệu:</strong> @productDetail.Brand.Name</p>
+                    <p><strong>Năm phát hành:</strong> @productDetail.ReleaseYear.Year</p>
+                    <p><strong>Nồng độ:</strong> @productDetail.Concentration%</p>
+                    <p><strong>Độ lưu hương:</strong> @productDetail.Longevity giờ</p>
+                    <p><strong>Xuất xứ:</strong> @productDetail.Origin.Name</p>
+                    <p><strong>Giới tính:</strong> @productDetail.Gender.Name</p>
+                    <p>@productDetail.Description</p>
+                </div>
+
+                <div class="add-to-cart">
+                    <form method="post" action="@Url.Action("AddToCart", "Cart")">
+                        <input type="hidden" name="productSizePricingId" value="@productDetail.Id" />
+                        <input type="number" name="quantity" value="1" min="1" class="form-control" style="width: 60px; display: inline-block;" />
+                        <button class="btn btn-primary mt-2" type="submit">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+            @if (ViewBag.UserId != null && ViewBag.HasOrder)
+            {
+                <form asp-action="SubmitFeedback" method="post" enctype="multipart/form-data" class="mt-4">
+                    <input type="hidden" name="ProductId" value="@productDetail.Id" />
+                    <textarea name="Content" rows="4" class="form-control" placeholder="Viết nhận xét của bạn:"></textarea>
+                    <label for="Rating">Đánh giá sao:</label>
+                    <select name="Rating" class="form-control">
+                        <option value="1">1 Sao</option>
+                        <option value="2">2 Sao</option>
+                        <option value="3">3 Sao</option>
+                        <option value="4">4 Sao</option>
+                        <option value="5">5 Sao</option>
+                    </select>
+                    <div class="form-group">
+                        <label for="files">Upload Files (Images or Videos):</label>
+                        <input type="file" name="files" class="form-control-file" multiple id="fileInput" />
+                    </div>
+
+                    <div id="captionsContainer"></div>
+                    <button type="submit" class="btn btn-primary mt-3">Gửi</button>
+                </form>
+            }
+            else
+            {
+                <p>Bạn cần mua hàng để có thể nhận xét.</p>
+            }
+            <section class="feedback-list mt-5">
+                <h3>Đánh giá</h3>
+                <p><strong>Trung bình Sao:</strong> @ViewBag.AverageRating stars</p>
+                <p><strong>Tổng số đánh giá:</strong> @ViewBag.TotalFeedbacks</p>
+                <h4>Phần trăm đánh giá sao:</h4>
+                <ul>
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <li>@(i + 1) Sao: @ViewBag.RatingPercentages[i].ToString("0.00")%</li>
+                    }
+                </ul>
+                <div>
+                    <h3>Phản hồi khách hàng</h3>
+                    @if (ViewBag.Feedbacks != null && ((IEnumerable<Feedback>)ViewBag.Feedbacks).Any())
+                    {
+                        @foreach (var feedback in (IEnumerable<Feedback>)ViewBag.Feedbacks)
+                        {
+                            <div class="feedback-item">
+                                <p><strong>@feedback.User.Username</strong> rated @feedback.Rating stars</p>
+                                <p>@feedback.Content</p>
+                                <div class="feedback-media" style="display: flex; flex-wrap: wrap;">
+                                    @if (feedback.Sources != null && feedback.Sources.Any())
+                                    {
+                                        foreach (var source in feedback.Sources)
+                                        {
+                                            if (source.Url.EndsWith(".mp4") || source.Url.EndsWith(".webm") || source.Url.EndsWith(".ogg"))
+                                            {
+                                                <video controls style="max-width: 400px; display: block; margin: 5px;">
+                                                    <source src="@source.Url" type="video/mp4">
+                                                </video>
+                                            }
+                                            else if (source.Url.EndsWith(".jpg") || source.Url.EndsWith(".jpeg") || source.Url.EndsWith(".png") || source.Url.EndsWith(".gif"))
+                                            {
+                                                <img src="@source.Url" alt="Feedback Image" style="max-width: 200px; display: block; margin: 5px;" />
+                                            }
+                                            if (!string.IsNullOrEmpty(source.Caption))
+                                            {
+                                                <p><em>@source.Caption</em></p>
+                                            }
+                                        }
+                                    }
+                                </div>
+                                <p><small>@feedback.CreatedAt.ToString("MMM dd, yyyy")</small></p>
+
+                                <!-- Hiển thị phản hồi -->
+                                <div class="feedback-response">
+                                    <h4>Phản hồi từ quản lý:</h4>
+                                    @if (feedback.FeedbackResponses != null && feedback.FeedbackResponses.Any())
+                                    {
+                                        foreach (var response in feedback.FeedbackResponses)
+                                        {
+                                            <div class="response-item">
+                                                <p><strong>@response.User.Username</strong> replied on @response.ResponseDate.ToString("MMM dd, yyyy")</p>
+                                                <p>@response.ResponseContent</p>
+                                                <div class="response-media" style="display: flex; flex-wrap: wrap;">
+                                                    @if (response.SourcesFeedbackRespones != null && response.SourcesFeedbackRespones.Any())
+                                                    {
+                                                        foreach (var source in response.SourcesFeedbackRespones)
+                                                        {
+                                                            if (source.Url.EndsWith(".mp4") || source.Url.EndsWith(".webm") || source.Url.EndsWith(".ogg"))
+                                                            {
+                                                                <video controls style="max-width: 400px; display: block; margin: 5px;">
+                                                                    <source src="@source.Url" type="video/mp4">
+                                                                </video>
+                                                            }
+                                                            else if (source.Url.EndsWith(".jpg") || source.Url.EndsWith(".jpeg") || source.Url.EndsWith(".png") || source.Url.EndsWith(".gif"))
+                                                            {
+                                                                <img src="@source.Url" alt="Response Image" style="max-width: 200px; display: block; margin: 5px;" />
+                                                            }
+                                                            if (!string.IsNullOrEmpty(source.Caption))
+                                                            {
+                                                                <p><em>@source.Caption</em></p>
+                                                            }
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>Chưa có phản hồi nào từ quản lý.</p>
+                                    }
+                                </div>
+
+                            </div>
+                        }
+                        <div class="pagination mt-3">
+                            @if (ViewBag.TotalPages > 1)
+                            {
+                                for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    <a href="@Url.Action("ProductDetail", "Product", new { id = productDetail.Id, page = i, query = ViewBag.SearchQuery })" class="btn btn-link @(i == (ViewBag.Page ?? 1) ? "active" : "")">@i</a>
+                                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p>Sản phẩm này chưa có đánh giá.</p>
+                    }
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-4">
+            <div class="sidebar">
+                <div class="search-box mb-4">
+                    @using (Html.BeginForm("ProductDetail", "Product", FormMethod.Get))
+                    {
+                        <input type="hidden" name="id" value="@productDetail.Id" />
+                        <input type="text" name="query" placeholder="Tìm kiếm sản phẩm" value="@ViewBag.SearchQuery" />
+                        <button type="submit">Tìm kiếm</button>
+                    }
+                </div>
+                <div class="categories mb-4">
+                    <h5>Danh mục</h5>
+                    <ul>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <li><a asp-action="Index" asp-controller="Category" asp-route-id="@category.Id">@category.Name</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="latest-products">
+                    <h5>Sản phẩm mới nhất</h5>
+                    <ul>
+                        @foreach (var latestProduct in ViewBag.LatestProducts)
+                        {
+                            <li><a asp-action="ProductDetail" asp-controller="Product" asp-route-id="@latestProduct.Id">@latestProduct.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.getElementById('fileInput').addEventListener('change', function (event) {
+        const captionsContainer = document.getElementById('captionsContainer');
+        captionsContainer.innerHTML = ''; // Xóa các caption cũ
+
+        const files = event.target.files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const captionInput = document.createElement('div');
+            captionInput.className = 'form-group';
+            captionInput.innerHTML = `
+                    <label for="caption_${i}">Caption for ${file.name}:</label>
+                    <input type="text" name="captions" id="caption_${i}" class="form-control" placeholder="Enter caption for ${file.name}" required />
+                `;
+            captionsContainer.appendChild(captionInput);
+        }
+    });
+</script>
+<script>
+    document.getElementById('sizeSelect').addEventListener('change', function () {
+        var selectedPrice = this.options[this.selectedIndex].getAttribute('data-price');
+        var priceDisplay = document.getElementById('productPrice');
+
+        if (selectedPrice) {
+            priceDisplay.textContent =  selectedPrice + "VND";
+        } else {
+            priceDisplay.textContent = "Vui lòng chọn kích thước để xem giá";
+        }
+    });
+</script>

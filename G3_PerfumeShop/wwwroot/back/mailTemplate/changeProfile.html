@@ -1,0 +1,58 @@
+﻿<!-- emailTemplate.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông báo thay đổi thông tin người dùng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #0073e6;
+        }
+
+        .info {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Thông báo cập nhật thông tin tài khoản</h2>
+        <p>Xin chào, {FirstName} {LastName}</p>
+        <p>Thông tin cá nhân của bạn đã được cập nhật thành công. Dưới đây là các thông tin mới nhất:</p>
+
+        <div class="info">
+            <strong>Họ và tên:</strong> {FirstName} {LastName}<br>
+            <strong>Số điện thoại:</strong> {Phone}<br>
+            <strong>Địa chỉ:</strong> {Address}<br>
+            <strong>Ngày sinh:</strong> {Birthdate}<br>
+            <strong>Giới tính:</strong> {Gender}
+        </div>
+
+        <p>Nếu bạn không thực hiện thay đổi này, vui lòng liên hệ với bộ phận hỗ trợ của chúng tôi.</p>
+        <p>Trân trọng,<br>Đội ngũ hỗ trợ</p>
+    </div>
+</body>
+</html>

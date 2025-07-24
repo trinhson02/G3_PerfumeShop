@@ -1,0 +1,179 @@
+﻿@model G3_PerfumeShop.Models.Blog
+@(Layout = null)
+@{
+    ViewData["Title"] = "Edit Post";
+}
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #3E8894;
+        color: #333;
+        line-height: 1.6;
+        padding: 20px;
+    }
+
+    .edit-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #154142;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .edit-title {
+        font-size: 24px;
+        color: #fff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 5px;
+        color: #fff;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+    .save-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+        .save-button:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-close-white {
+        background-color: #6c757d;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        width: 100%;
+        margin-top: 10px; 
+        margin-bottom: 20px; 
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+        .btn-close-white:hover {
+            background-color: #5a6268;
+        }
+
+    .text-danger {
+        color: #e74a3b;
+        font-size: 14px;
+    }
+</style>
+
+<h2 class="edit-title">Edit Post</h2>
+
+<form asp-action="EditPost" method="post" class="edit-container">
+    <div class="edit-container" style="display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: flex-end;">
+            <a href="@Url.Action("Index", "PostManagement")" class="btn btn-close-white">Back to List</a>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="BlogContent">Content</label>
+        <textarea class="form-control" id="BlogContent" name="BlogContent" rows="5">@Model.BlogContent</textarea>
+        <span asp-validation-for="BlogContent" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="CreatedAt">Created At</label>
+        <input type="datetime-local" class="form-control" id="CreatedAt" name="CreatedAt"
+               value="@Model.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ss")" />
+        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="ImageUrl">Image URL</label>
+        <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Author">Author</label>
+        <input type="text" class="form-control" id="Author" name="Author" value="@Model.Author" />
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="UpdatedAt">Updated At</label>
+        <input type="datetime-local" class="form-control" id="UpdatedAt" name="UpdatedAt"
+               value="@(Model.UpdatedAt.HasValue ? Model.UpdatedAt.Value.ToString("yyyy-MM-ddTHH:mm:ss") : "")" />
+        <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="BlogCategoryId">Category</label>
+        <select class="form-control" id="BlogCategoryId" name="BlogCategoryId">
+            @foreach (var category in ViewBag.BlogCategories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="BlogStatusId">Status</label>
+        <select class="form-control" id="BlogStatusId" name="BlogStatusId">
+            @foreach (var status in ViewBag.BlogStatuses)
+            {
+                <option value="@status.Id">@status.Name</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="save-button">Save Changes</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

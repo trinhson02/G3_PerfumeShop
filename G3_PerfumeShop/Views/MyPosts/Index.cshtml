@@ -1,0 +1,271 @@
+﻿@{
+    ViewBag.Title = "Demo Post";
+
+    // Tạo danh sách blog mẫu (fake data)
+    var blogs = new List<dynamic>
+    {
+        new { Id = 1, Title = "Fragrance 101", Category = "Fragrance", Author = "John Doe", Status = "Published", ThumbnailUrl = "https://via.placeholder.com/50" },
+        new { Id = 2, Title = "Beauty Hacks", Category = "Beauty", Author = "Jane Smith", Status = "Draft", ThumbnailUrl = "https://via.placeholder.com/50" },
+        new { Id = 3, Title = "Skincare Routine", Category = "Lifestyle", Author = "Alex Doe", Status = "Published", ThumbnailUrl = "https://via.placeholder.com/50" },
+        new { Id = 4, Title = "Lifestyle Tips", Category = "Lifestyle", Author = "John Doe", Status = "Draft", ThumbnailUrl = "https://via.placeholder.com/50" }
+    };
+}
+
+<style>
+    <style >
+    /* Background and overall page styling */
+    body {
+        background-color: #3E8894;
+        color: #fff;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Container styling */
+    .container {
+        margin-top: 20px;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Heading styling */
+    h2 {
+        color: #3E8894;
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    /* Home Button */
+    .btn-home {
+        background-color: #3E8894;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        text-decoration: none;
+        margin-bottom: 20px;
+        display: inline-block;
+        font-size: 16px;
+    }
+
+        .btn-home i {
+            margin-right: 8px;
+        }
+
+        .btn-home:hover {
+            background-color: #357A7F;
+        }
+
+    /* Form styling */
+    form {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Input and button styling */
+    input[type="text"],
+    select {
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 100%;
+    }
+
+    button {
+        background-color: #3E8894;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 15px; /* Sửa lại radius cho button */
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+    }
+
+        button:hover {
+            background-color: #357A7F;
+        }
+
+    
+
+    /* Table styling */
+    table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+        table th,
+        table td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #3E8894;
+            color: #fff;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+    /* Button styling for actions */
+    .btn {
+        padding: 6px 12px;
+        border-radius: 10px; /* Sửa lại radius cho button */
+        text-align: center;
+        color: #fff;
+        border: none;
+        font-size: 14px;
+    }
+
+    .btn-info {
+        background-color: #5bc0de;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+    }
+
+    .btn-info:hover {
+        background-color: #31b0d5;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+    }
+
+    /* Pagination styling */
+    .pagination {
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .page-item .page-link {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        color: #3E8894;
+    }
+
+        .page-item .page-link:hover {
+            background-color: #3E8894;
+            color: #fff;
+        }
+
+    .page-item.active .page-link {
+        background-color: #3E8894;
+        color: #fff;
+    }
+</style>
+
+<div class="container">
+    <h2>My Posts</h2>
+
+    <!-- Filter and Search Form -->
+    <div class="row">
+        <div class="col-md-12">
+            <form method="get" action="#">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" name="Title" placeholder="Search by Title" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <select name="BlogCategoryId" class="form-control">
+                            <option value="">Filter by Category</option>
+                            <option value="1">Fragrance</option>
+                            <option value="2">Lifestyle</option>
+                            <option value="3">Beauty</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                    <div>
+                        <a href="@Url.Action("AddPost", "PostAdd")" class="btn btn-success">+ Add New Post</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+
+    <div class="row">
+        <div class="col-md-12">
+            
+            <!-- Blog List Table -->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Thumbnail</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Content</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    
+                    <tr>
+                        <td>1</td>
+                        <td><img src="https://via.placeholder.com/50" alt="Thumbnail" /></td>
+                        <td>Fragrance 101</td>
+                        <td>Fragrance</td>
+                        <td>auto generate</td>
+                        <td>
+                            <a href="#" class="btn btn-info">View</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><img src="https://via.placeholder.com/50" alt="Thumbnail" /></td>
+                        <td>Beauty Hacks</td>
+                        <td>Beauty</td>
+                        <td>auto generate</td>
+                        <td>
+                            <a href="#" class="btn btn-info">View</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><img src="https://via.placeholder.com/50" alt="Thumbnail" /></td>
+                        <td>Skincare Routine</td>
+                        <td>Lifestyle</td>
+                        <td>auto generate</td>
+                        <td>
+                            <a href="#" class="btn btn-info">View</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination (Hardcoded) -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
+</div>

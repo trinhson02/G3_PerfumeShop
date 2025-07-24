@@ -1,0 +1,104 @@
+﻿@model G3_PerfumeShop.Models.User
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Form</title>
+    <link rel="stylesheet" href="~/css/UserProfile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-card">
+            <img id="image" class="profile-picture" src="@Model.ImageUrl" alt="User Profile Picture" disable>
+            <div class="profile-info">
+                <h2>@Model.LastName  @Model.FirstName</h2>
+                <p>@Model.Email</p>
+            </div>
+            <button class="edit-button" id="editButton" onclick="enableEdit()">Sửa</button>
+        </div>
+        <br />
+
+        <!-- Chú ý: enctype="multipart/form-data" để hỗ trợ upload file -->
+        <form asp-action="Index" method="post" enctype="multipart/form-data" id="userForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="LastName">Họ:</label>
+                    <input asp-for="LastName" type="text" id="lastName" disabled>
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">Tên:</label>
+                    <input asp-for="FirstName" type="text" id="firstName" disabled>
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">Điện thoại:</label>
+                    <input asp-for="Phone" type="text" id="phone" disabled>
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="address">Địa chỉ:</label>
+                    <input asp-for="Address" type="text" id="address" disabled>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="birthDate">Ngày sinh:</label>
+                    <input type="date" id="birthDate" name="Birthdate" value="@Model.Birthdate.ToString("yyyy-MM-dd")" disabled>
+                    <span asp-validation-for="Birthdate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Giới tính:</label>
+                    <input type="text" id="gender" name="Gender" value="@Model.GenderDisplay" disabled>
+                </div>
+            </div>
+            <!-- Thêm input để chọn ảnh -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="imageFile">Chọn ảnh:</label>
+                    <input type="file" name="ImageFile" id="imageFile" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Thay đổi giới tính : 1 - Nam , 2 - Nữ</label>
+                    </div>
+            </div>
+            <button class="save-button" id="saveButton" style="display: none;">Lưu</button>
+            <button type="button" class="cancel-button" id="cancelButton" style="display: none;" onclick="cancelEdit()">Hủy</button>
+        </form>
+    </div>
+
+    <script>
+        function enableEdit() {
+            document.getElementById('image').disabled = false;
+            document.getElementById('lastName').disabled = false;
+            document.getElementById('firstName').disabled = false;
+            document.getElementById('phone').disabled = false;
+            document.getElementById('address').disabled = false;
+            document.getElementById('birthDate').disabled = false;
+            document.getElementById('gender').disabled = false;
+            document.getElementById('imageFile').disabled = false; // Bật trường chọn ảnh
+
+            document.getElementById('saveButton').style.display = 'inline-block';
+            document.getElementById('cancelButton').style.display = 'inline-block';
+            document.getElementById('editButton').style.display = 'none';
+        }
+        function cancelEdit() {
+            // Reload lại trang để trở về trạng thái không chỉnh sửa
+            location.reload();
+        }
+    </script>
+
+    @section Scripts {
+        <script src="~/lib/jquery/jquery.min.js"></script>
+        <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    }
+</body>
+</html>
